@@ -5,7 +5,7 @@ Scène d'exploration 3D isométrique en **Three.js** pour GitHub Pages. Accès p
 ## Évolutions de cette version
 
 - Un second module `art-direction.js` construit **de la vraie géométrie 3D** de finition : des tuiles de toiture instanciées, des volets et balcons, des arcades, des modénatures, des garde-corps, des jardinières, des guirlandes lumineuses, des étals de livres et un décor central enrichi.
-- Refonte de la lumière (exposition et bloom plus retenus), fog moins chargé, caméra légèrement plus aplatie et textures existantes conservées.
+- Refonte de la lumière (exposition et bloom plus retenus), fog moins chargé, caméra légèrement plus aplatie, arrière-plan côtier remodelé et mer atténuée à l’horizon.
 - 12 zones littéraires localisables, chacune avec un panneau de démonstration ; ni prix ni stock fictifs.
 - Mode « Immersion » pour masquer l'interface et juger le décor sans obstacles visuels.
 - Préservation des versions précédentes dans l'historique Git et de l'application principale dans `/`.

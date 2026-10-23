@@ -114,9 +114,20 @@ const sky=add(new THREE.SphereGeometry(630,48,32),new THREE.ShaderMaterial({
  fragmentShader:`varying vec3 vPosition;uniform float uSun;uniform float uNight;uniform float uTime;float noise(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}void main(){float h=clamp(normalize(vPosition).y*.5+.5,0.,1.);vec3 dusk=vec3(.96,.52,.39);vec3 high=mix(vec3(.09,.25,.43),vec3(.18,.43,.68),uSun);vec3 low=mix(vec3(.19,.27,.46),dusk,uSun);vec3 col=mix(low,high,smoothstep(.1,.83,h));col=mix(col,vec3(.008,.025,.08)+h*vec3(.025,.04,.12),uNight);float cloud=sin(vPosition.x*.014+sin(vPosition.z*.008))*sin(vPosition.z*.009+sin(vPosition.x*.005));cloud=smoothstep(.58,.88,cloud)*(.25+uSun*.18)*smoothstep(.4,.7,h);col=mix(col,vec3(1.,.92,.84),cloud*(1.-uNight));float star=noise(floor(normalize(vPosition).xz*730.));col+=vec3(1.,.94,.8)*step(.9989,star)*uNight*smoothstep(.51,.75,h);gl_FragColor=vec4(col,1.);}`
 }),[0,0,0]);sky.castShadow=false;sky.receiveShadow=false;
 const seaUniforms={uTime:{value:0},uNight:{value:0},uSun:{value:1}};
-const sea=add(new THREE.PlaneGeometry(1400,1400,180,180),new THREE.ShaderMaterial({uniforms:seaUniforms,side:THREE.DoubleSide,
+const sea=add(new THREE.PlaneGeometry(570,570,138,138),new THREE.ShaderMaterial({uniforms:seaUniforms,side:THREE.DoubleSide,transparent:true,depthWrite:false,
  vertexShader:`uniform float uTime; varying vec3 vP;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;p.z+=sin(p.x*.10+uTime*.58)*.20+cos(p.y*.13+uTime*.4)*.20+sin((p.x+p.y)*.22+uTime)*.09;vP=p;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
- fragmentShader:`uniform float uTime;uniform float uNight;uniform float uSun;varying vec3 vP;varying vec2 vUv;void main(){float w=sin(vP.x*.23+uTime*.8+sin(vP.y*.12))*cos(vP.y*.19-uTime*.62);float ww=sin((vP.x+vP.y)*.51+uTime*1.45);float foam=smoothstep(.72,1.,w*.62+ww*.36);vec3 aqua=mix(vec3(.02,.25,.31),vec3(.06,.43,.47),.5+.5*w);aqua=mix(aqua,vec3(.12,.56,.62),foam*.43);aqua+=foam*vec3(.3,.35,.28);aqua=mix(aqua,vec3(.012,.06,.16),uNight*.8);aqua*=.8+uSun*.3;gl_FragColor=vec4(aqua,1.);}`
+ fragmentShader:`uniform float uTime;uniform float uNight;uniform float uSun;varying vec3 vP;varying vec2 vUv;
+void main(){
+ float w=sin(vP.x*.095+uTime*.27+sin(vP.y*.04))*cos(vP.y*.075-uTime*.21);
+ float glint=pow(max(0.,sin(vP.x*.29+uTime*.8)*sin(vP.y*.31-uTime*.64)),29.);
+ vec3 aqua=mix(vec3(.035,.23,.34),vec3(.08,.48,.53),clamp(.46+.40*w,0.,1.));
+ aqua+=vec3(.22,.27,.23)*glint*.38;
+ aqua=mix(aqua,vec3(.018,.085,.17),uNight*.78);
+ aqua*=.79+uSun*.29;
+ float edge=min(min(vUv.x,1.-vUv.x),min(vUv.y,1.-vUv.y));
+ float alpha=smoothstep(.015,.23,edge);
+ gl_FragColor=vec4(aqua,alpha);
+}`
 }),[0,-5.5,0]);sea.rotation.x=-Math.PI/2;sea.castShadow=false;sea.receiveShadow=true;
 
 const hemi=new THREE.HemisphereLight('#d2e7ff','#946d4a',1.4);scene.add(hemi);
@@ -138,12 +149,40 @@ island([[-43,20],[-24,17],[-17,29],[-26,38],[-42,33]],5.0,1.3,M.stone);
 island([[20,19],[38,20],[40,31],[27,39],[13,37]],5.2,1.2,M.stone);
 // Cliff mineral strata, outcrops, irregular shoreline boulders.
 const rockGeo=new THREE.DodecahedronGeometry(1,0);
-const rockMesh=new THREE.InstancedMesh(rockGeo,M.rock,225);rockMesh.castShadow=true;rockMesh.receiveShadow=true;scene.add(rockMesh);
+const rockMesh=new THREE.InstancedMesh(rockGeo,M.rock,900);rockMesh.castShadow=true;rockMesh.receiveShadow=true;scene.add(rockMesh);
 const rockColors=['#9a9388','#c8baaa','#b5a99b','#7b807a','#d7c6ab'];
-for(let i=0;i<225;i++){let a=i/225*Math.PI*2+randJitter(),r=rnd(40,55);let x=Math.cos(a)*r,z=Math.sin(a)*r*.72;tempObj.position.set(x,rnd(-8,1),z);tempObj.rotation.set(rnd(-1,1),rnd(0,Math.PI),rnd(-.4,.4));tempObj.scale.set(rnd(1.4,4.7),rnd(1.4,5.4),rnd(1.2,4.3));tempObj.updateMatrix();rockMesh.setMatrixAt(i,tempObj.matrix);rockMesh.setColorAt(i,C(choice(rockColors)))}rockMesh.instanceMatrix.needsUpdate=true;function randJitter(){return rnd(-.018,.018)}
-// Distant Mediterranean coast to anchor the scene in a real horizon.
-for(let i=0;i<27;i++){const x=-300+i*24,zz=-230+rnd(-28,18);const h=rnd(12,37);let hill=add(new THREE.ConeGeometry(rnd(12,28),h,6),mat(choice(['#849890','#7d9a91','#9eaaa3','#869397'])),[x,h/2-5,zz]);hill.rotation.y=rnd(0,6.28);hill.castShadow=false;}
-for(let i=0;i<19;i++){const x=rnd(-175,130),z=-151+rnd(-9,9);box(rnd(3,8),rnd(4,9),rnd(3,8),M.plaster,x,rnd(0,3),z);box(rnd(4,9),.6,rnd(4,9),M.roof,x,8,z);}
+for(let i=0;i<900;i++){let a=i/900*Math.PI*2+randJitter(),r=rnd(40,54);let x=Math.cos(a)*r,z=Math.sin(a)*r*.78;tempObj.position.set(x,rnd(-10,1.5),z);tempObj.rotation.set(rnd(-1,1),rnd(0,Math.PI),rnd(-.4,.4));tempObj.scale.set(rnd(.7,2.9),rnd(.9,3.5),rnd(.7,3.1));tempObj.updateMatrix();rockMesh.setMatrixAt(i,tempObj.matrix);rockMesh.setColorAt(i,C(choice(rockColors)))}rockMesh.instanceMatrix.needsUpdate=true;function randJitter(){return rnd(-.018,.018)}
+// Riviera horizon: layered natural ridgelines instead of low-poly pyramid mountains.
+function mountainRidge(depth,base,maxHeight,color,offset){
+ const vertices=[],indices=[],count=64,span=700;
+ for(let i=0;i<=count;i++){
+  const x=-span/2+i*span/count,t=i/count;
+  const hill=.38+.26*Math.sin(t*11.1+offset)+.18*Math.sin(t*24.7+offset*.6)+.11*Math.sin(t*46.2+offset*1.7);
+  const height=base+Math.max(.12,hill)*maxHeight;
+  vertices.push(x,-9,depth,x,height,depth);
+  if(i<count){const j=i*2;indices.push(j,j+1,j+2,j+1,j+3,j+2)}
+ }
+ const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(vertices,3));geo.setIndex(indices);geo.computeVertexNormals();
+ const mesh=new THREE.Mesh(geo,new THREE.MeshStandardMaterial({color,roughness:1,side:THREE.DoubleSide,flatShading:false}));
+ mesh.castShadow=false;mesh.receiveShadow=false;scene.add(mesh);
+}
+mountainRidge(-262,-5,32,'#9aaca9',1.3);
+mountainRidge(-233,-7,23,'#7d9b9d',.4);
+mountainRidge(-207,-6,11,'#77939a',1.8);
+// Distant village belongs to the coastline instead of floating over the sea.
+const backdropPalette=['#d9c7ad','#e3d4bf','#e8dcbf','#b5c0b8'];
+for(let i=0;i<38;i++){
+ const x=-145+i*8.3+rnd(-2,2),z=-202+rnd(-4,5),h=rnd(3.1,6.7);
+ const w=rnd(3,6.5),d=rnd(2.8,5.4);
+ const b=box(w,h,d,mat(choice(backdropPalette)),x,-5+h/2,z);b.castShadow=false;
+ const roof=box(w+.35,.46,d+.32,M.roof,x,-5+h+.16,z);roof.castShadow=false;
+}
+// Diffuse clouds along the distant coast.
+const cloudMat=new THREE.MeshBasicMaterial({color:'#f8f2e6',transparent:true,opacity:.14,depthWrite:false});
+for(let i=0;i<26;i++){
+ const x=-290+i*23,z=-240+rnd(-24,12),yy=rnd(13,36);
+ const mesh=sph(rnd(8,14),cloudMat,x,yy,z);mesh.scale.y=rnd(.22,.42);mesh.castShadow=false;
+}
 // Architecture toolkit — all walls, roofs and colonnades are real geometry.
 function pillar(x,z,base=6.2,height=8,r=.55,material=M.ivory){
  cyl(r*1.25,r*1.25,.34,M.stone,x,base+.17,z);
@@ -286,7 +325,7 @@ function library(){
  for(let x of [-15,15])for(let z of [-26,-18,-10])pillar(x,z,y,12.6,.31);
  // Celestial glass dome and detailed gilded ribs, not a billboard.
  const radius=11.65,domeBase=y+13.4;
- const glassMaterial=new THREE.MeshPhysicalMaterial({color:'#8bbed8',metalness:.12,roughness:.08,transparent:true,opacity:.31,side:THREE.DoubleSide,depthWrite:false,clearcoat:1,clearcoatRoughness:.12});
+ const glassMaterial=new THREE.MeshPhysicalMaterial({color:'#65a9cf',metalness:.15,roughness:.10,transparent:true,opacity:.66,side:THREE.FrontSide,depthWrite:false,clearcoat:1,clearcoatRoughness:.12,emissive:'#0d334c',emissiveIntensity:.24});
  const dome=add(new THREE.SphereGeometry(radius,48,24,0,Math.PI*2,0,Math.PI/2),glassMaterial,[0,domeBase,cZ]);
  dome.castShadow=false;dome.receiveShadow=false;
  for(let i=0;i<20;i++){
@@ -397,7 +436,7 @@ const foliage={leaf:new THREE.SphereGeometry(1,9,6),petal:new THREE.TetrahedronG
 const leafInstances=new THREE.InstancedMesh(foliage.leaf,mat('#ffffff',.96),900);
 leafInstances.castShadow=true;leafInstances.receiveShadow=true;scene.add(leafInstances);
 const leafColors=['#365f3f','#608048','#8da365','#4e774c','#739452','#adc078','#536948'];
-const flowerInst=new THREE.InstancedMesh(foliage.petal,mat('#ffffff',.86),920);
+const flowerInst=new THREE.InstancedMesh(foliage.petal,mat('#ffffff',.86),1200);
 flowerInst.castShadow=false;flowerInst.receiveShadow=true;scene.add(flowerInst);
 const flowerColors=['#a94d81','#d46f96','#e59ca6','#f3c0bc','#895f94','#f4d29d','#e37a87','#ba526c'];
 let leafIndex=0,flowerIndex=0;
@@ -442,7 +481,7 @@ tree(-27,5.7,15,.88,'sakura');
 for(const [x,z,y,s] of [[-43,-10,7.2,1.1],[-24,-26,7.2,.86],[20,-27,7.4,1.15],[43,-20,7.4,.95],[-46,11,5.7,.8],[45,12,5.9,1],[30,32,5.2,.8],[-33,35,5,.75],[-5,35,5.2,.76],[15,34,5.2,.68]])tree(x,y,z,s,'olive');
 for(const [x,z,y,s] of [[-49,-22,4.2,1.1],[-15,-33,4.2,.95],[-49,18,4.2,1.2],[-20,21,5.4,1.15],[15,22,5.8,.9],[49,-18,4.2,1],[39,26,5.2,1.05],[22,-35,4.2,1.05],[43,-31,4.2,.8],[-36,-39,4.2,1]])tree(x,y,z,s,'cypress');
 // Flower gardens along the balustrades and cliff top, kept off the circulation axis.
-for(let i=0;i<810;i++){
+for(let i=0;i<895;i++){
  const zone=i%8;
  let x,z,y;
  if(zone===0){x=rnd(-48,-30);z=rnd(-28,-21);y=7.3}
@@ -455,7 +494,7 @@ for(let i=0;i<810;i++){
  if(zone===7){x=rnd(-22,18);z=rnd(-28,-26);y=6.3}
  // ground foliage with vibrant flower crowns
  if(i%5===0){leafCluster(x,y+.4,z,rnd(.3,.65),rnd(.25,.45),rnd(.3,.65),choice(['#598344','#37774d','#60814d','#7e975c']));}
- flower(x,y+rnd(.4,1),z,rnd(.1,.28));
+ flower(x,y+rnd(.4,1),z,rnd(.22,.48));
 }
 leafInstances.count=leafIndex;leafInstances.instanceMatrix.needsUpdate=true;if(leafInstances.instanceColor)leafInstances.instanceColor.needsUpdate=true;
 flowerInst.count=flowerIndex;flowerInst.instanceMatrix.needsUpdate=true;if(flowerInst.instanceColor)flowerInst.instanceColor.needsUpdate=true;
