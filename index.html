@@ -2,62 +2,57 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1c3037">
-  <meta name="description" content="Explorez La Librairie des Mondes, une ville-librairie méditerranéenne jouable façon JRPG rétro. Rencontrez ses habitants et découvrez jeunesse, mangas, littérature, fantasy, BD, romance et bien plus.">
-  <meta property="og:title" content="La Librairie des Mondes — Une aventure littéraire">
-  <meta property="og:description" content="Un village de livres à explorer comme un jeu de rôle rétro.">
-  <meta property="og:type" content="website">
-  <title>La Librairie des Mondes ✦ Un JRPG littéraire</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#142733">
+  <meta name="description" content="Explorez une librairie méditerranéenne jouable comme un JRPG, découvrez ses 12 quartiers, leurs livres et leurs habitants.">
+  <meta property="og:title" content="La Librairie des Mondes — L'aventure commence ici">
+  <meta property="og:description" content="Une cité de livres méditerranéenne à explorer comme un jeu vidéo. Marche, découvre, lis.">
+  <title>La Librairie des Mondes ✦ Une aventure littéraire</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="./css/jrpg.css">
+  <link rel="preload" as="image" href="./assets/mediterranean-jrpg.webp">
+  <link rel="stylesheet" href="./css/premium.css">
 </head>
 <body>
-  <div id="app">
-    <header class="site-header">
-      <a href="#accueil" id="brand" class="brand" aria-label="Revenir à la place du village">
-        <span class="brand-book" aria-hidden="true">✦</span>
-        <span><span class="brand-small">LES CHRONIQUES DE</span><strong>La Librairie <em>des Mondes</em></strong></span>
-      </a>
-      <div class="header-right">
-        <span class="online-dot">MONDE OUVERT · 12 QUARTIERS</span>
-        <button type="button" id="search-toggle" class="header-button" aria-label="Rechercher un livre ou un rayon"><span aria-hidden="true">⌕</span> <span>RECHERCHE</span></button>
-        <button type="button" id="map-toggle" class="header-button accent">☰ <span>CARTE</span></button>
+<div id="app">
+  <header class="header">
+    <a class="logo" id="home" href="#accueil" aria-label="Retour à la place centrale"><span class="logo-symbol">✦</span><span><small>LES CHRONIQUES DE</small><strong>La Librairie <em>des Mondes</em></strong></span></a>
+    <div class="header-controls">
+      <span class="live-dot">✧ <span>LE MONDE EST OUVERT</span></span>
+      <button class="header-btn" id="world-map" type="button">⌗ <span>LES QUARTIERS</span></button>
+      <button class="header-btn" id="search-open" type="button">⌕ <span>CHERCHER UN LIVRE</span></button>
+    </div>
+  </header>
+  <main class="main">
+    <section class="play-stage" aria-label="Village-librairie jouable">
+      <canvas id="game" role="application" tabindex="0" aria-label="Jeu de la librairie. Utilisez les flèches du clavier ou ZQSD pour vous déplacer le long des chemins, cliquez sur un quartier pour vous y rendre, et E ou Entrée pour entrer dans une boutique. Sur mobile, touchez un quartier."></canvas>
+      <div class="scene-shade" aria-hidden="true"></div>
+      <div class="stage-top">
+        <div class="location-pill"><span class="pin">✥</span><div><small>VOUS EXPLOREZ</small><b id="location">La place des histoires</b></div></div>
+        <div class="progress-pill"><span>✦ <span class="progress-label">CHRONIQUES DÉCOUVERTES</span></span><strong id="progress">0 / 12</strong></div>
       </div>
-    </header>
-
-    <main>
-      <section id="playground" class="playground" aria-label="Carte interactive du village-librairie">
-        <canvas id="game" tabindex="0" role="application" aria-label="Village-librairie jouable. Déplacement avec les touches fléchées ou ZQSD, ou en cliquant sur la carte. E ou Entrée pour parler aux habitants ou entrer dans un rayon."></canvas>
-        <div class="gradient-top" aria-hidden="true"></div>
-        <div class="gradient-bottom" aria-hidden="true"></div>
-        <aside class="location-badge" aria-live="polite"><span class="location-star">✣</span><span><small>VOUS EXPLOREZ</small><strong id="location-title">La place des histoires</strong></span></aside>
-        <div class="quest" id="quest"><span class="quest-star">✦</span><span><small>VOTRE QUÊTE</small><strong>Un livre pour un nouveau monde</strong></span><span class="quest-count" id="quest-count">0 / 12</span></div>
-        <div class="scene-tooltip" id="game-tooltip" hidden></div>
-        <div class="environment" aria-label="Ambiance du village">
-          <label for="time-select"><span aria-hidden="true">☼</span><span class="sr-only">Heure du jour</span><select id="time-select"><option value="auto">Heure locale</option><option value="8">Matin</option><option value="13">Midi</option><option value="18">Crépuscule</option><option value="23">Nuit</option></select></label>
-          <label for="season-select"><span aria-hidden="true">❀</span><span class="sr-only">Saison</span><select id="season-select"><option value="auto">Saison actuelle</option><option value="spring">Printemps</option><option value="summer">Été</option><option value="autumn">Automne</option><option value="winter">Hiver</option></select></label>
-          <button type="button" id="recenter" aria-label="Revenir à la place centrale" title="Recentrer la caméra">◎</button>
-          <button type="button" id="sound-toggle" aria-pressed="false" title="Activer les sons d'ambiance" aria-label="Activer les sons d'ambiance">♪</button>
+      <div class="stage-bottom">
+        <div class="help-panel" id="help">✥ <span>CLIQUEZ SUR UN QUARTIER OU UTILISEZ LES FLÈCHES</span><kbd>E</kbd><span>ENTRER</span></div>
+        <div class="env-buttons">
+          <label class="select-shell">☼ <span class="sr">Heure</span><select id="time"><option value="auto">Heure locale</option><option value="morning">Matin</option><option value="day">Journée</option><option value="sunset">Crépuscule</option><option value="night">Nuit</option></select></label>
+          <label class="select-shell">❀ <span class="sr">Saison</span><select id="season"><option value="auto">Saison actuelle</option><option value="spring">Printemps</option><option value="summer">Été</option><option value="autumn">Automne</option><option value="winter">Hiver</option></select></label>
+          <button class="icon-button" id="recenter" title="Revenir à la place" aria-label="Recentrer la caméra">◎</button>
+          <button class="icon-button" id="sound" title="Activer l'ambiance sonore" aria-label="Activer l'ambiance sonore" aria-pressed="false">♪</button>
         </div>
-        <div class="play-hint"><kbd>↑</kbd><kbd>←</kbd><kbd>↓</kbd><kbd>→</kbd><span>SE DÉPLACER</span><kbd>E</kbd><span>INTERAGIR</span><span class="hint-mobile">OU TOUCHEZ LE DÉCOR</span></div>
-        <div class="touch-pad" aria-label="Commandes tactiles"><button data-dir="up" aria-label="Aller vers le haut">▲</button><button data-dir="left" aria-label="Aller à gauche">◀</button><button data-dir="down" aria-label="Aller vers le bas">▼</button><button data-dir="right" aria-label="Aller à droite">▶</button></div>
-        <button class="action-button" id="mobile-interact" aria-label="Interagir avec l'élément proche">E <span>PARLER</span></button>
-      </section>
-
-      <section class="intro-strip" aria-label="Présentation de la librairie">
-        <div class="intro-copy"><span class="eyebrow">✦ UN MONDE DE LECTURE À EXPLORER</span><h1>Les livres sont des <em>portails.</em></h1><p>Entre mer turquoise et ruelles de Provence, découvre les quartiers de notre librairie. Promène-toi, rencontre les habitants et entre dans le rayon qui t'inspire.</p></div>
-        <div class="intro-steps"><span><b>01</b> EXPLORE LE VILLAGE</span><span><b>02</b> ENTRE DANS UN RAYON</span><span><b>03</b> TROUVE TON PROCHAIN LIVRE</span></div>
-      </section>
-      <section class="indexable" aria-labelledby="districts-heading"><h2 id="districts-heading">Les douze quartiers du village</h2><div id="district-links" class="district-links"></div></section>
-    </main>
-
-    <div class="drawer-shade" id="drawer-shade" hidden></div>
-    <aside id="drawer" class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true" tabindex="-1"><button type="button" id="drawer-close" class="drawer-close" aria-label="Fermer">×</button><div id="drawer-content"></div></aside>
-    <div id="dialogue" class="dialogue" hidden role="status" aria-live="polite"><div class="dialogue-portrait" id="dialogue-portrait">✦</div><div><small id="dialogue-name">HABITANT</small><p id="dialogue-text"></p><span class="dialogue-continue">CLIQUER OU ENTRÉE POUR CONTINUER ▾</span></div></div>
-    <div id="toast" class="toast" role="status" aria-live="polite"></div>
-    <div class="welcome" id="welcome"><div class="welcome-inner"><div class="welcome-art">✦ ❀ ✦</div><span class="eyebrow">UN VOYAGE À TRAVERS LES LIVRES</span><h2>Bienvenue à la<br><em>Librairie des Mondes</em></h2><p>Ton aventure commence sur une petite place au bord de la Méditerranée. Douze quartiers, mille histoires et peut-être ton prochain livre préféré.</p><button type="button" id="start-adventure" class="pixel-button">COMMENCER L'AVENTURE <span>▶</span></button><small>FLÈCHES / ZQSD · CLIC POUR SE DÉPLACER · E POUR INTERAGIR</small></div></div>
-  </div>
-  <script type="module" src="./js/jrpg-main.js"></script>
+      </div>
+      <div class="game-action" id="game-action" hidden><b id="action-title"></b><span id="action-hint">E POUR ENTRER</span></div>
+      <div class="touch-dpad" aria-label="Déplacements tactiles"><button data-dir="up" aria-label="Vers le haut">▲</button><button data-dir="left" aria-label="À gauche">◀</button><button data-dir="down" aria-label="Vers le bas">▼</button><button data-dir="right" aria-label="À droite">▶</button></div>
+      <button id="touch-enter" class="touch-enter">E <span>ENTRER</span></button>
+      <div id="message" class="message" hidden role="status" aria-live="polite"></div>
+      <div id="loading" class="loading"><span class="loader-star">✦</span><strong>Le village s'éveille…</strong><small>Nous préparons les chemins de votre aventure.</small></div>
+    </section>
+    <section class="beneath"><div><span class="eyebrow">✧ UN MONDE À PARCOURIR</span><h1>Chaque livre ouvre <em>un monde.</em></h1><p>Promenez-vous entre le vieux port, les jardins fleuris et les ruelles de pierre. Chaque quartier cache des livres et des rencontres.</p></div><button class="gold-button" id="beneath-map">CHOISIR UN QUARTIER <span>↗</span></button></section>
+    <section class="seo"><h2>Les douze univers de notre librairie</h2><div id="seo-links" class="seo-links"></div></section>
+  </main>
+  <div id="scrim" class="scrim" hidden></div>
+  <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title" aria-hidden="true"><button class="drawer-close" id="drawer-close" aria-label="Fermer">×</button><div id="drawer-content"></div></aside>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="welcome" class="welcome"><div class="welcome-inner"><span class="welcome-stars">✦ ✧ ✦</span><span class="eyebrow">UNE AVENTURE AU BORD DE LA MÉDITERRANÉE</span><h2>Bienvenue à la<br><em>Librairie des Mondes</em></h2><p>Un village vivant, des petites histoires à découvrir et douze quartiers où se cache peut-être votre prochain livre préféré.</p><button class="gold-button" id="start" type="button">COMMENCER L'AVENTURE <span>▶</span></button><small>FLÈCHES OU ZQSD · CLIC POUR SE PROMENER · E POUR ENTRER</small></div></div>
+</div>
+<script type="module" src="./js/premium.js"></script>
 </body>
 </html>
