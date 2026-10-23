@@ -64,7 +64,14 @@
       <section id="discover" class="below-content" aria-labelledby="discover-title">
         <div><span class="eyebrow dark">LA CARTE DES UNIVERS</span><h2 id="discover-title">Laissez-vous guider par la curiosité.</h2></div>
         <p>Explorez les grandes familles de livres, flânez entre les rayons et découvrez des œuvres incontournables. La librairie 3D est une première version interactive, appelée à accueillir tout notre catalogue.</p>
-        <nav id="category-links" class="category-links" aria-label="Toutes les catégories de livres"></nav>
+        <nav id="category-links" class="category-links" aria-label="Toutes les catégories de livres">
+          <a href="#jeunesse">Jeunesse</a><a href="#manga">Manga</a><a href="#bd">BD &amp; Comics</a>
+          <a href="#litterature">Littérature</a><a href="#fantasy">Fantasy &amp; Science-fiction</a>
+          <a href="#romance">Romance</a><a href="#polar">Polar &amp; Thriller</a>
+          <a href="#histoire">Histoire &amp; Société</a><a href="#bien-etre">Bien-être &amp; Nature</a>
+          <a href="#papeterie">Papeterie &amp; Cadeaux</a><a href="#blog">Avis &amp; Chroniques</a>
+          <a href="#retrait">Retrait sur place</a>
+        </nav>
       </section>
     </main>
 
@@ -75,6 +82,15 @@
     </aside>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
-  <script type="module" src="./js/main.js"></script>
+  <script type="module">
+    import('./js/main.js').catch(error => {
+      console.error('Impossible de charger la librairie 3D :', error);
+      document.querySelector('#loading')?.classList.add('done');
+      const fallback = document.querySelector('#fallback');
+      if (fallback) fallback.hidden = false;
+      document.querySelector('#fallback-open')?.addEventListener('click', () =>
+        document.querySelector('#discover')?.scrollIntoView({behavior:'smooth'}));
+    });
+  </script>
 </body>
 </html>
