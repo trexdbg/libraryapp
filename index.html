@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f3e9d7">
+  <meta name="description" content="Explorez une librairie méditerranéenne en 3D : jeunesse, manga, BD, littérature, fantasy, romance, polar et plus encore. Un village de livres interactif qui suit les heures et les saisons.">
+  <title>La Librairie des Mondes · Explorez les livres en 3D</title>
+  <meta property="og:title" content="La Librairie des Mondes — Un monde de livres à explorer">
+  <meta property="og:description" content="Promenez-vous dans un village-librairie méditerranéen interactif en 3D.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./css/style.css">
+  <script type="importmap">
+    {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/"}}
+  </script>
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <a class="brand" href="#accueil" id="home-link" aria-label="La Librairie des Mondes, accueil">
+        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M24 40c-7-5-14-6-20-5V9c9-2 16 2 20 6 4-4 11-8 20-6v26c-6-1-13 0-20 5ZM24 15v25" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span><span class="brand-overline">LA</span><span class="brand-name">Librairie <em>des Mondes</em></span><span class="brand-caption">Un voyage commence par un livre.</span></span>
+      </a>
+      <div class="top-actions">
+        <form id="search-form" class="search" role="search">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5" stroke="currentColor" stroke-width="1.8"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <label class="sr-only" for="search-input">Rechercher un univers, un livre ou un auteur</label>
+          <input id="search-input" type="search" placeholder="Un livre, un auteur, un univers…" autocomplete="off">
+          <kbd>/</kbd>
+        </form>
+        <button id="toggle-collections" class="top-icon" type="button" aria-label="Afficher tous les rayons" title="Tous les rayons"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5h7v6H4zM13 5h7v6h-7zM4 13h7v6H4zM13 13h7v6h-7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></button>
+      </div>
+    </header>
+
+    <main>
+      <section class="explorer" aria-label="Village-librairie 3D interactif">
+        <div id="scene" class="scene" role="img" aria-label="Un village méditerranéen en trois dimensions, avec une grande bibliothèque centrale, des terrasses, des livres et la mer. Faites glisser la scène pour la faire tourner, et cliquez sur un rayon pour l'explorer."></div>
+        <div id="loading" class="loading" role="status" aria-live="polite"><span class="loader-icon">✦</span><strong>La librairie prend vie…</strong><small>Nous ouvrons les portes de votre prochain voyage.</small></div>
+        <div id="fallback" class="fallback" hidden><h2>Le voyage continue sans WebGL</h2><p>Votre navigateur ne peut pas afficher la scène 3D. Retrouvez tous les rayons grâce au bouton « Tous les rayons ».</p><button class="primary-btn" id="fallback-open" type="button">Voir les rayons</button></div>
+        <div class="scene-vignette" aria-hidden="true"></div>
+
+        <div class="intro">
+          <div class="eyebrow"><span class="eyebrow-line"></span> UNE LIBRAIRIE À CIEL OUVERT</div>
+          <h1>Chaque livre<br>ouvre un <i>monde.</i></h1>
+          <p>Un village méditerranéen à explorer, des histoires à rencontrer. Choisissez votre prochaine aventure.</p>
+          <button id="explore-btn" class="primary-btn" type="button">Explorer les rayons <span aria-hidden="true">↗</span></button>
+        </div>
+
+        <div id="hotspots" class="hotspots" aria-label="Rayons de la librairie"></div>
+
+        <div class="scene-side-note"><span class="side-rule"></span><span>LA MÉDITERRANÉE<br>DES HISTOIRES</span></div>
+        <div class="scene-controls">
+          <div class="environment-info"><span class="env-sun" aria-hidden="true">☀</span><div><strong id="environment-title">Sous le soleil de la Méditerranée</strong><span id="environment-subtitle">Lumière adaptée à votre heure locale</span></div></div>
+          <div class="control-buttons">
+            <label class="control-select" for="time-select"><span class="sr-only">Éclairage</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M12 1v3m0 16v3M1 12h3m16 0h3M4 4l2 2m12 12 2 2M20 4l-2 2M6 18l-2 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><select id="time-select" aria-label="Choisir l'éclairage"><option value="auto">Heure locale</option><option value="8">Matin</option><option value="13">Midi</option><option value="18">Coucher de soleil</option><option value="23">Nuit</option></select></label>
+            <label class="control-select" for="season-select"><span class="sr-only">Saison</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 21V4m0 7C8 7 5 7 3 4m9 11c4-4 7-4 9-8M8 21h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><select id="season-select" aria-label="Choisir la saison"><option value="auto">Saison actuelle</option><option value="spring">Printemps</option><option value="summer">Été</option><option value="autumn">Automne</option><option value="winter">Hiver</option></select></label>
+            <button id="reset-view" class="icon-btn" type="button" aria-label="Réinitialiser la vue" title="Recentrer la vue"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 12a9 9 0 1 1 2.5 6.3M3 19v-6h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+        </div>
+        <p class="gesture-hint"><span aria-hidden="true">✥</span> Glissez pour visiter · Molette pour zoomer · Cliquez sur un quartier</p>
+      </section>
+
+      <section id="discover" class="below-content" aria-labelledby="discover-title">
+        <div><span class="eyebrow dark">LA CARTE DES UNIVERS</span><h2 id="discover-title">Laissez-vous guider par la curiosité.</h2></div>
+        <p>Explorez les grandes familles de livres, flânez entre les rayons et découvrez des œuvres incontournables. La librairie 3D est une première version interactive, appelée à accueillir tout notre catalogue.</p>
+        <nav id="category-links" class="category-links" aria-label="Toutes les catégories de livres"></nav>
+      </section>
+    </main>
+
+    <div id="panel-backdrop" class="panel-backdrop" hidden></div>
+    <aside id="detail-panel" class="detail-panel" aria-label="Détail du rayon" aria-modal="true" role="dialog" aria-hidden="true">
+      <button id="close-panel" class="close-panel" type="button" aria-label="Fermer le rayon">×</button>
+      <div id="detail-content"></div>
+    </aside>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
