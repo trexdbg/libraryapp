@@ -1,32 +1,41 @@
-# La Librairie des Mondes — Édition JRPG premium
+# La Librairie des Mondes — JRPG V4
 
-Prototype jouable de village-librairie inspiré des ambiances JRPG 16 bits, avec une image **originale** de cité méditerranéenne en pixel-art, animée et rendue dans un `canvas`.
+Version jouable, mise à jour graphique et navigation, pour GitHub Pages : https://trexdbg.github.io/libraryapp/
 
-## Ce qui fonctionne
+## V4 — nouveautés
 
-- Grande illustration optimisée WebP (~1 Mo) avec caméra qui suit le personnage, et mode mobile zoomé.
-- Navigation réelle par réseau de ruelles, escaliers et ponts (26 embranchements) ; déplacement au clavier et voyage par clic vers les douze quartiers.
-- Personnage pixel-art animé, 8 habitants, bulles de dialogue, repères d’entrée lumineux, effets d'eau, éclairages et particules.
-- 12 boutiques/espaces visitables : chaque quartier ouvre un **intérieur pixel-art généré**, avec bibliothèque, meubles, fenêtres, luminaires, plantes et personnage mobile.
-- Suggestions de lecture et recherche, liens Open Library ; pas de faux inventaire commercial.
-- Heure locale + réglage manuel ; printemps, été, automne, hiver ; ambiance musicale optionnelle très légère (synthèse audio simple, sans droits tiers).
-- Progression locale sauvegardée (`localStorage`), interface mobile/clavier accessible et contenu indexable.
+- **Spritesheets dessinés pixel par pixel** : 10 modèles de personnages (héros et PNJ), 4 directions et 4 images de marche, dans `assets/characters.png`. Le héros est réduit selon son emplacement dans la perspective du décor pour se rapprocher de la taille des personnages peints.
+- **Déplacement guidé** : graphe de plus de 50 points de marche positionnés sur les escaliers, les arcades, les quais, les ponts et les terrasses. Calcul du plus court itinéraire et animation des pas. Les clics sur un rayon n'envoient plus le personnage tout droit à travers les bâtiments.
+- **Cadrage du décor** : bascule « Vue générale / Suivi héros », redimensionnement sans déformation de l'illustration, fond raccord lorsqu'un ratio d'écran laisse des marges, caméra confinée à la carte.
+- **Intérieurs thématiques** : enrichissements dédiés aux rayons manga, jeunesse, polar, fantasy/SF, romance, histoire, café, papeterie, etc. avec des éléments et lumières spécifiques.
+- **Ambiances** : éclairage local selon l'heure, lanternes la nuit, saisons et particules facultatives.
+- **12 quartiers** et suggestions éditoriales conservés, interactions avec les habitants, exploration mobile et clavier, progression sauvegardée.
 
-## Démarrer
+## Limites et intentions
+
+La ville principale demeure une **illustration pixel-art intégrée dans un moteur Canvas 2D**, pas un monde 3D ni une tilemap complètement modélisée. Les déplacements empruntent les chemins visibles autant que le décor peint le permet, mais l'image ne fournit pas de calque d'occlusion ni de géométrie fiable pour chaque marche. Pour atteindre le niveau d'un JRPG commercial, la prochaine étape est un vrai tileset segmenté, des bâtiments avec masques avant-plan/arrière-plan et des sprites d'animations dessinés à la main.
+
+Les livres cités sont des **suggestions**, pas un catalogue de stock, ni une offre de commandes opérationnelle.
+
+## Exécuter localement
 
 ```bash
 python3 -m http.server 8000
-# ouvrir http://localhost:8000
 ```
 
-## Github Pages
+Ouvrir `http://localhost:8000` (ne pas ouvrir `index.html` avec `file://`). Pas de Node, bundler, backend ou CDN indispensable à l'exécution.
 
-**Settings → Pages → Build and deployment → Deploy from a branch → main → /(root).**
+## Publication GitHub Pages
 
-Le site est entièrement statique, sans build ni service côté serveur. Pas besoin de Cloudflare pour jouer.
+Dans **Settings → Pages**, sélectionner **Deploy from a branch**, `main`, `/(root)`.
 
-## Direction artistique et limites
+## Contrôles
 
-L'illustration principale est un concept art en pixel-art composité avec des sprites et animations réels. Les rues sont parcourues via un **graphe de déplacement simplifié** et non un jeu à collisions libres : cela garantit que le personnage ne traverse pas visuellement les bâtiments. Les intérieurs utilisent un petit moteur de décor procédural en pixel art, avec variantes par genre. Cette édition est une étape interactive, **pas un jeu commercial fini** : pour une fidélité absolue à chaque vue, il faudra produire un atlas de tiles et des animations dessinées spécialement pour chaque quartier. Les textes qui font partie de l'illustration principale sont intégrés à l'image ; pour pouvoir traduire et adapter l'interface à toutes les résolutions, ils devront être redessinés comme éléments UI séparés.
+- Flèches et ZQSD : se déplacer le long des routes
+- Clic dans le monde : rejoindre le point de promenade le plus proche
+- Clic sur un quartier ou menu « Quartiers » : atteindre son entrée
+- E / Entrée : entrer dans le quartier ou lire les livres dans une salle
+- Échap : quitter l'intérieur ; « Vue générale » pour afficher tout le panorama
+- Sur mobile : contrôles tactiles ou navigation par clic
 
-Aucun livre suggéré n'est garanti en stock. Aucun paiement ou retrait effectif n'est implémenté.
+Pour diagnostiquer le réseau de chemins : ajouter `?debugPaths` à l'URL (overlay réservée au développement).

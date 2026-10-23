@@ -10,6 +10,7 @@
   <title>La Librairie des Mondes ✦ Une aventure littéraire</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="preload" as="image" href="./assets/mediterranean-jrpg.webp">
+  <link rel="preload" as="image" href="./assets/characters.png">
   <link rel="stylesheet" href="./css/premium.css">
 </head>
 <body>
@@ -31,10 +32,11 @@
         <div class="progress-pill"><span>✦ <span class="progress-label">CHRONIQUES DÉCOUVERTES</span></span><strong id="progress">0 / 12</strong></div>
       </div>
       <div class="stage-bottom">
-        <div class="help-panel" id="help">✥ <span>CLIQUEZ SUR UN QUARTIER OU UTILISEZ LES FLÈCHES</span><kbd>E</kbd><span>ENTRER</span></div>
+        <div class="help-panel" id="help">✥ <span>TOUCHEZ UN QUARTIER · SUIVEZ LES SENTIERS À PIED</span><kbd>E</kbd><span>ENTRER</span></div>
         <div class="env-buttons">
           <label class="select-shell">☼ <span class="sr">Heure</span><select id="time"><option value="auto">Heure locale</option><option value="morning">Matin</option><option value="day">Journée</option><option value="sunset">Crépuscule</option><option value="night">Nuit</option></select></label>
           <label class="select-shell">❀ <span class="sr">Saison</span><select id="season"><option value="auto">Saison actuelle</option><option value="spring">Printemps</option><option value="summer">Été</option><option value="autumn">Automne</option><option value="winter">Hiver</option></select></label>
+          <button class="icon-button overview-toggle" id="overview" type="button" aria-pressed="true" title="Basculer entre la vue entière du village et le suivi du personnage">◈ Vue générale</button>
           <button class="icon-button" id="recenter" title="Revenir à la place" aria-label="Recentrer la caméra">◎</button>
           <button class="icon-button" id="sound" title="Activer l'ambiance sonore" aria-label="Activer l'ambiance sonore" aria-pressed="false">♪</button>
         </div>

@@ -11,49 +11,79 @@ const rand=(a,b)=>a+Math.random()*(b-a),clamp=(n,a,b)=>Math.max(a,Math.min(b,n))
 const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 const palette=['#587b5e','#c67f66','#577996','#b69a64','#8e6588','#598993'];
 const categories=[
- {id:'jeunesse',title:'Jeunesse',icon:'✿',color:'#6b8d51',subtitle:'Les contes commencent ici',description:'Albums illustrés, premiers romans, histoires du soir et belles découvertes pour grandir.',x:311,y:193,entry:11,theme:'garden',books:[['Le Petit Prince','Antoine de Saint-Exupéry'],['Matilda','Roald Dahl'],['Le Gruffalo','Julia Donaldson']]},
- {id:'manga',title:'Manga',icon:'桜',color:'#b46a94',subtitle:'Mille aventures sous les sakuras',description:'Shōnen, shōjo, seinen et découvertes japonaises, sous les lanternes du quartier manga.',x:331,y:376,entry:9,theme:'manga',books:[['One Piece','Eiichirō Oda'],['Nausicaä de la Vallée du Vent','Hayao Miyazaki'],['Frieren','Kanehito Yamada & Tsukasa Abe']]},
- {id:'bd',title:'BD & Comics',icon:'✎',color:'#b17b50',subtitle:'Des bulles pleines de vie',description:'Bandes dessinées, romans graphiques et comics : des héros pour tous les âges.',x:479,y:393,entry:10,theme:'comics',books:[['Astérix le Gaulois','René Goscinny & Albert Uderzo'],['L’Arabe du futur','Riad Sattouf'],['Watchmen','Alan Moore & Dave Gibbons']]},
- {id:'litterature',title:'Littérature',icon:'❧',color:'#667a8e',subtitle:'Le cœur de la bibliothèque',description:'Romans contemporains, classiques et belles voix venues du monde entier.',x:846,y:351,entry:2,theme:'library',books:[['L’Étranger','Albert Camus'],['La Tresse','Laetitia Colombani'],['Chanson douce','Leïla Slimani']]},
- {id:'fantasy',title:'Fantasy & Science-Fiction',icon:'✧',color:'#4e77ae',subtitle:'De l’autre côté des étoiles',description:'Mondes magiques, vaisseaux, dragons, portes du temps et récits du futur.',x:1307,y:196,entry:17,theme:'cosmos',books:[['Dune','Frank Herbert'],['Le Hobbit','J. R. R. Tolkien'],['La Horde du Contrevent','Alain Damasio']]},
- {id:'romance',title:'Romance',icon:'♡',color:'#bb6a80',subtitle:'Des histoires qui font battre le cœur',description:'Romance contemporaine, romantasy, récits historiques et émotions à partager.',x:1371,y:363,entry:19,theme:'romance',books:[['Orgueil et Préjugés','Jane Austen'],['Les Sept Maris d’Evelyn Hugo','Taylor Jenkins Reid'],['Jamais plus','Colleen Hoover']]},
- {id:'polar',title:'Polar & Thriller',icon:'⌕',color:'#81595b',subtitle:'La ruelle des mystères',description:'Enquêtes, crimes et mystères haletants derrière la porte des archives.',x:1269,y:484,entry:21,theme:'noir',books:[['Le Crime de l’Orient-Express','Agatha Christie'],['Millénium','Stieg Larsson'],['La Vérité sur l’affaire Harry Quebert','Joël Dicker']]},
- {id:'histoire',title:'Histoire & Société',icon:'♜',color:'#b28c56',subtitle:'Voyager dans les siècles',description:'Histoire, philosophie, sciences humaines et idées pour comprendre notre monde.',x:641,y:514,entry:7,theme:'study',books:[['Sapiens','Yuval Noah Harari'],['Une histoire populaire des États-Unis','Howard Zinn'],['Le Deuxième Sexe','Simone de Beauvoir']]},
- {id:'bienetre',title:'Bien-être & Nature',icon:'❀',color:'#659580',subtitle:'Respirer et lire',description:'Vie au grand air, cuisine, jardinage, santé et art de vivre.',x:568,y:475,entry:8,theme:'garden',books:[['La Vie secrète des arbres','Peter Wohlleben'],['Le Charme discret de l’intestin','Giulia Enders'],['L’Art de la simplicité','Dominique Loreau']]},
- {id:'papeterie',title:'Papeterie & Cadeaux',icon:'✦',color:'#598f7e',subtitle:'Des petites merveilles à offrir',description:'Carnets, stylos, cartes et attentions pour accompagner les belles lectures.',x:1141,y:612,entry:23,theme:'shop',books:[]},
- {id:'blog',title:'Avis & Chroniques',icon:'☷',color:'#a87555',subtitle:'Le café des lecteurs',description:'Coups de cœur, chroniques et discussions de livres autour d’une table en terrasse.',x:619,y:688,entry:13,theme:'cafe',books:[]},
- {id:'retrait',title:'Retrait sur place',icon:'▣',color:'#527f87',subtitle:'Du site à votre librairie',description:'Le futur point de réservation en ligne et de retrait des livres à Villeneuve-Loubet.',x:1360,y:755,entry:26,theme:'shop',books:[]}
+ {id:'jeunesse',title:'Jeunesse',icon:'✿',color:'#6b8d51',subtitle:'Les contes commencent ici',description:'Albums illustrés, premiers romans, histoires du soir et belles découvertes pour grandir.',x:311,y:193,entry:18,theme:'garden',books:[['Le Petit Prince','Antoine de Saint-Exupéry'],['Matilda','Roald Dahl'],['Le Gruffalo','Julia Donaldson']]},
+ {id:'manga',title:'Manga',icon:'桜',color:'#b46a94',subtitle:'Mille aventures sous les sakuras',description:'Shōnen, shōjo, seinen et découvertes japonaises, sous les lanternes du quartier manga.',x:331,y:376,entry:13,theme:'manga',books:[['One Piece','Eiichirō Oda'],['Nausicaä de la Vallée du Vent','Hayao Miyazaki'],['Frieren','Kanehito Yamada & Tsukasa Abe']]},
+ {id:'bd',title:'BD & Comics',icon:'✎',color:'#b17b50',subtitle:'Des bulles pleines de vie',description:'Bandes dessinées, romans graphiques et comics : des héros pour tous les âges.',x:479,y:393,entry:12,theme:'comics',books:[['Astérix le Gaulois','René Goscinny & Albert Uderzo'],['L’Arabe du futur','Riad Sattouf'],['Watchmen','Alan Moore & Dave Gibbons']]},
+ {id:'litterature',title:'Littérature',icon:'❧',color:'#667a8e',subtitle:'Le cœur de la bibliothèque',description:'Romans contemporains, classiques et belles voix venues du monde entier.',x:846,y:351,entry:5,theme:'library',books:[['L’Étranger','Albert Camus'],['La Tresse','Laetitia Colombani'],['Chanson douce','Leïla Slimani']]},
+ {id:'fantasy',title:'Fantasy & Science-Fiction',icon:'✧',color:'#4e77ae',subtitle:'De l’autre côté des étoiles',description:'Mondes magiques, vaisseaux, dragons, portes du temps et récits du futur.',x:1307,y:196,entry:23,theme:'cosmos',books:[['Dune','Frank Herbert'],['Le Hobbit','J. R. R. Tolkien'],['La Horde du Contrevent','Alain Damasio']]},
+ {id:'romance',title:'Romance',icon:'♡',color:'#bb6a80',subtitle:'Des histoires qui font battre le cœur',description:'Romance contemporaine, romantasy, récits historiques et émotions à partager.',x:1371,y:363,entry:27,theme:'romance',books:[['Orgueil et Préjugés','Jane Austen'],['Les Sept Maris d’Evelyn Hugo','Taylor Jenkins Reid'],['Jamais plus','Colleen Hoover']]},
+ {id:'polar',title:'Polar & Thriller',icon:'⌕',color:'#81595b',subtitle:'La ruelle des mystères',description:'Enquêtes, crimes et mystères haletants derrière la porte des archives.',x:1269,y:484,entry:30,theme:'noir',books:[['Le Crime de l’Orient-Express','Agatha Christie'],['Millénium','Stieg Larsson'],['La Vérité sur l’affaire Harry Quebert','Joël Dicker']]},
+ {id:'histoire',title:'Histoire & Société',icon:'♜',color:'#b28c56',subtitle:'Voyager dans les siècles',description:'Histoire, philosophie, sciences humaines et idées pour comprendre notre monde.',x:641,y:514,entry:9,theme:'study',books:[['Sapiens','Yuval Noah Harari'],['Une histoire populaire des États-Unis','Howard Zinn'],['Le Deuxième Sexe','Simone de Beauvoir']]},
+ {id:'bienetre',title:'Bien-être & Nature',icon:'❀',color:'#659580',subtitle:'Respirer et lire',description:'Vie au grand air, cuisine, jardinage, santé et art de vivre.',x:568,y:475,entry:10,theme:'garden',books:[['La Vie secrète des arbres','Peter Wohlleben'],['Le Charme discret de l’intestin','Giulia Enders'],['L’Art de la simplicité','Dominique Loreau']]},
+ {id:'papeterie',title:'Papeterie & Cadeaux',icon:'✦',color:'#598f7e',subtitle:'Des petites merveilles à offrir',description:'Carnets, stylos, cartes et attentions pour accompagner les belles lectures.',x:1141,y:612,entry:34,theme:'shop',books:[]},
+ {id:'blog',title:'Avis & Chroniques',icon:'☷',color:'#a87555',subtitle:'Le café des lecteurs',description:'Coups de cœur, chroniques et discussions de livres autour d’une table en terrasse.',x:619,y:688,entry:45,theme:'cafe',books:[]},
+ {id:'retrait',title:'Retrait sur place',icon:'▣',color:'#527f87',subtitle:'Du site à votre librairie',description:'Le futur point de réservation en ligne et de retrait des livres à Villeneuve-Loubet.',x:1360,y:755,entry:42,theme:'shop',books:[]}
 ];
 const byId=Object.fromEntries(categories.map(c=>[c.id,c]));
-// Routes follow the actual stairs, plazas and bridges in the painted town.
+// Navigation is traced along visible stairways, paved terraces and bridges of the artwork.
+// Each segment is a short, hand-verified walking stretch; no diagonal shortcuts through buildings.
 const nodes=[
- [833,566,[1,3,4,5]], // 0 grande place
- [827,467,[0,2,6]], // 1 vers le dôme
- [847,368,[1]], // 2 grande librairie
- [704,543,[0,7,12]], // 3 ouest
- [976,550,[0,20,22]], // 4 est
- [834,665,[0,12,14]], // 5 vers le port
- [710,405,[1,7,16]], // 6 étages ouest
- [632,515,[3,6,8,9]], // 7 histoire
- [565,476,[7,10]], // 8 nature
- [333,364,[10,11]], // 9 manga
- [463,407,[8,9,6]], // 10 ruelle manga BD
- [328,202,[9,16]], // 11 jeunesse
- [658,648,[3,5,13]], // 12 café
- [619,705,[12,14]], // 13 chroniques
- [798,742,[5,13,25]], // 14 pont inférieur
- [1162,310,[16,17,18]], // 15 terrasse fantasy
- [756,335,[6,11,15]], // 16 pont haut
- [1290,209,[15]], // 17 fantasy
- [1210,387,[15,19,20]], // 18 vers romance
- [1365,349,[18]], // 19 romance
- [1128,514,[4,18,21,23]], // 20 quartier polar
- [1260,474,[20,19,22]], // 21 polar
- [1125,634,[4,21,23,24]], // 22 boutique rue
- [1133,604,[20,22]], // 23 cadeaux
- [1202,694,[22,25,26]], // 24 escalier port
- [1021,731,[14,24]], // 25 pont port
- [1374,744,[24]] // 26 retrait
+  [830, 577, [1, 6, 8, 35]],
+  [781, 565, [0, 2]],
+  [769, 520, [1, 3]],
+  [783, 456, [2, 4]],
+  [815, 412, [3, 5]],
+  [844, 367, [4, 19]],
+  [933, 557, [0, 7, 48]],
+  [1020, 549, [6, 48]],
+  [711, 548, [0, 9, 43]],
+  [638, 514, [8, 10]],
+  [560, 484, [9, 11]],
+  [511, 448, [10, 12]],
+  [460, 404, [11, 13, 14]],
+  [340, 373, [12]],
+  [470, 365, [12, 15]],
+  [484, 305, [14, 16]],
+  [497, 260, [15, 17]],
+  [425, 225, [16, 18]],
+  [315, 199, [17]],
+  [963, 358, [5, 20]],
+  [1055, 314, [19, 21]],
+  [1150, 309, [20, 22, 24]],
+  [1224, 259, [21, 23]],
+  [1291, 204, [22]],
+  [1161, 348, [21, 25]],
+  [1215, 383, [24, 26]],
+  [1313, 363, [25, 27]],
+  [1366, 349, [26, 28]],
+  [1379, 413, [27, 29]],
+  [1338, 462, [28, 30, 31]],
+  [1269, 471, [29]],
+  [1366, 536, [29, 32]],
+  [1320, 591, [31, 33]],
+  [1231, 639, [32, 34, 40]],
+  [1140, 624, [33, 39]],
+  [820, 634, [0, 36, 55]],
+  [871, 672, [35, 37]],
+  [949, 680, [36, 38]],
+  [1030, 693, [37, 39]],
+  [1117, 665, [34, 38, 50]],
+  [1188, 686, [33, 53]],
+  [1212, 767, [51, 53]],
+  [1358, 840, [52]],
+  [701, 649, [8, 44, 54]],
+  [652, 683, [43, 45]],
+  [615, 708, [44]],
+  [806, 713, []],
+  [936, 728, []],
+  [970, 619, [6, 7, 49]],
+  [1057, 657, [48, 50]],
+  [1142, 680, [39, 49]],
+  [1233, 807, [41, 52]],
+  [1292, 834, [42, 51]],
+  [1190, 741, [40, 41]],
+  [749, 637, [43, 55]],
+  [775, 632, [35, 54]],
 ].map(([x,y,links])=>({x,y,links}));
 const stage={mode:'world',inside:null,loaded:false};
 const character={x:nodes[0].x,y:nodes[0].y,dir:'down',step:0,route:[],arrival:null,insideX:480,insideY:494};
@@ -67,8 +97,11 @@ const npcs=[
  {x:1337,y:758,shade:2,t:'Un jour, vous récupérerez ici vos livres commandés en ligne.',name:'Noé, du port'},
  {x:1270,y:219,shade:4,t:'Sur cette terrasse, on peut presque toucher les étoiles.',name:'Morgane, astronome'}
 ];
-let viewW=1,viewH=1,dpr=1,scale=1,cam={x:836,y:510},targetCam={x:836,y:510},zoom=1;
+let viewW=1,viewH=1,dpr=1,scale=1,cam={x:836,y:510},targetCam={x:836,y:510},zoom=1,overview=true;
 let worldImage=new Image();worldImage.src='./assets/mediterranean-jrpg.webp';
+let spriteAtlasLoaded=false;const spriteAtlas=new Image();
+spriteAtlas.addEventListener('load',()=>{spriteAtlasLoaded=true});
+spriteAtlas.src='./assets/characters.png';
 let last=0,clock=0,nightMode='day',seasonMode='summer',panelFocus=null,toaster=0,mouse={x:-1,y:-1},muted=true,sfx=null;
 const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)').matches;
 const particles=Array.from({length:85},(_,i)=>({x:rand(0,WORLD.width),y:rand(0,WORLD.height),v:rand(.2,1.5),seed:rand(0,30)}));
@@ -81,9 +114,33 @@ function paintTime(){
  let m=new Date().getMonth();seasonMode=$('#season').value==='auto'?(m===11||m<2?'winter':m<5?'spring':m<8?'summer':'autumn'):$('#season').value;
 }
 function song(tone=740){if(muted)return;try{sfx??=new (window.AudioContext||window.webkitAudioContext)();const o=sfx.createOscillator(),g=sfx.createGain();o.connect(g);g.connect(sfx.destination);o.type='triangle';o.frequency.setValueAtTime(tone,sfx.currentTime);o.frequency.exponentialRampToValueAtTime(tone*.68,sfx.currentTime+.22);g.gain.setValueAtTime(.035,sfx.currentTime);g.gain.exponentialRampToValueAtTime(.001,sfx.currentTime+.25);o.start();o.stop(sfx.currentTime+.28)}catch{}}
-function resize(){const rect=canvas.getBoundingClientRect();viewW=Math.max(1,rect.width);viewH=Math.max(1,rect.height);dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(viewW*dpr);canvas.height=Math.round(viewH*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const base=Math.max(viewW/WORLD.width,viewH/WORLD.height);zoom=viewW<760?2.1:1.02;scale=base*zoom;if(stage.mode==='world'){cam.x=character.x;cam.y=character.y}}
+function resize(){
+ const rect=canvas.getBoundingClientRect();viewW=Math.max(1,rect.width);viewH=Math.max(1,rect.height);dpr=Math.min(2,devicePixelRatio||1);
+ canvas.width=Math.round(viewW*dpr);canvas.height=Math.round(viewH*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
+ const cover=Math.max(viewW/WORLD.width,viewH/WORLD.height);
+ const contain=Math.min(viewW/WORLD.width,viewH/WORLD.height);
+ zoom=overview ? Math.max(.78,Math.min(1,contain/cover)) : (viewW<760?1.72:1.26);
+ scale=cover*zoom;
+ if(stage.mode==='world'){
+  if(overview){cam.x=WORLD.width/2;cam.y=WORLD.height/2;targetCam={...cam}}
+  else{cam.x=character.x;cam.y=character.y-35;targetCam={...cam}}
+ }
+ clampCamera();
+}
 function worldToScreen(p){return{x:(p.x-cam.x)*scale+viewW/2,y:(p.y-cam.y)*scale+viewH/2}}
 function screenToWorld(x,y){return{x:(x-viewW/2)/scale+cam.x,y:(y-viewH/2)/scale+cam.y}}
+function clampCamera(){
+ const halfW=viewW/(2*scale),halfH=viewH/(2*scale);
+ cam.x=halfW>=WORLD.width/2?WORLD.width/2:clamp(cam.x,halfW,WORLD.width-halfW);
+ cam.y=halfH>=WORLD.height/2?WORLD.height/2:clamp(cam.y,halfH,WORLD.height-halfH);
+ targetCam.x=halfW>=WORLD.width/2?WORLD.width/2:clamp(targetCam.x,halfW,WORLD.width-halfW);
+ targetCam.y=halfH>=WORLD.height/2?WORLD.height/2:clamp(targetCam.y,halfH,WORLD.height-halfH);
+}
+function setOverview(value){
+ overview=value;
+ const button=$('#overview');if(button){button.setAttribute('aria-pressed',String(value));button.textContent=value?'◈ Vue générale':'⊙ Suivi héros'}
+ resize();
+}
 function chooseNode(x,y){let k=0,d=Infinity;nodes.forEach((p,i)=>{const v=Math.hypot(x-p.x,y-p.y);if(v<d){d=v;k=i}});return k}
 function findRoute(from,to){const n=nodes.length,distances=Array(n).fill(Infinity),prev=Array(n).fill(-1),done=new Set();distances[from]=0;for(let j=0;j<n;j++){let u=-1;for(let i=0;i<n;i++)if(!done.has(i)&&(u<0||distances[i]<distances[u]))u=i;if(u<0||distances[u]===Infinity)break;if(u===to)break;done.add(u);for(const v of nodes[u].links){const next=distances[u]+dist(nodes[u],nodes[v]);if(next<distances[v]){distances[v]=next;prev[v]=u}}}let path=[],cur=to;while(cur!==-1){path.push(cur);if(cur===from)break;cur=prev[cur]}path.reverse();return path[0]===from?path:[from,to]}
 function routeTo(node,arrival){
@@ -101,7 +158,14 @@ function update(dt){clock+=dt;
   let amount=dt*95;
   while(amount>0&&character.route.length){const t=character.route[0],dx=t.x-character.x,dy=t.y-character.y,len=Math.hypot(dx,dy);if(len<1){character.x=t.x;character.y=t.y;character.route.shift();continue;}const v=Math.min(amount,len);character.x+=dx/len*v;character.y+=dy/len*v;character.dir=Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';character.step+=v*.065;amount-=v;if(v>=len-1)character.route.shift();else break;}
   if(!character.route.length&&character.arrival){const fn=character.arrival;character.arrival=null;fn()}
-  targetCam={x:character.x,y:character.y-35};let f=clamp(dt*3,0,1);cam.x+=(targetCam.x-cam.x)*f;cam.y+=(targetCam.y-cam.y)*f;
+  if(!character.route.length&&!character.arrival){
+    const held=pressed.ArrowUp||pressed.z||pressed.Z||pressed.w||pressed.W?'up':
+               pressed.ArrowDown||pressed.s||pressed.S?'down':
+               pressed.ArrowLeft||pressed.q||pressed.Q||pressed.a||pressed.A?'left':
+               pressed.ArrowRight||pressed.d||pressed.D?'right':null;
+    if(held&&clock-lastHeldTurn>.17){lastHeldTurn=clock;movingDirection(held)}
+  }
+  if(!overview){targetCam={x:character.x,y:character.y-35};let f=clamp(dt*4,0,1);cam.x+=(targetCam.x-cam.x)*f;cam.y+=(targetCam.y-cam.y)*f;}clampCamera();
   let near=null,nearest=55;for(const c of categories){const d=dist(character,nodes[c.entry]);if(d<nearest){nearest=d;near=c}}
   actionEl.hidden=!near;if(near){$('#action-title').textContent=near.title;$('#action-hint').textContent='E POUR ENTRER'}
   if(!character.route.length&&near)locationEl.textContent=near.title;
@@ -109,11 +173,33 @@ function update(dt){clock+=dt;
   else locationEl.textContent='La place des histoires';
  }else{const keys=pressed;let dx=(keys.ArrowRight||keys.d||keys.D?1:0)-(keys.ArrowLeft||keys.q||keys.Q||keys.a||keys.A?1:0),dy=(keys.ArrowDown||keys.s||keys.S?1:0)-(keys.ArrowUp||keys.z||keys.Z||keys.w||keys.W?1:0);if(dx||dy){let len=Math.hypot(dx,dy);character.insideX=clamp(character.insideX+dx/len*dt*165,185,760);character.insideY=clamp(character.insideY+dy/len*dt*165,408,565);character.dir=Math.abs(dx)>Math.abs(dy)?dx>0?'right':'left':dy>0?'down':'up';character.step+=dt*10;}if(character.insideY>545&&character.insideX>438&&character.insideX<518){/* exit indicated in center at floor */}}
 }
-// Pixel-character sprites, generated frame by frame in a tiny offscreen atlas.
-function sprite(variant=0,dir='down',frame=0){const c=document.createElement('canvas');c.width=24;c.height=35;const g=c.getContext('2d');const pixel=(x,y,w,h,col)=>{g.fillStyle=col;g.fillRect(x,y,w,h)};const tones=['#cf8a51','#e2aa71','#a66b49','#eab489','#bc865f','#d49b75'];const coats=['#285c93','#bf6150','#48846d','#82629b','#c69a50','#597782'];const skin=tones[variant%tones.length],coat=coats[variant%coats.length],hair=['#673b28','#392b2e','#d1a650','#352a4a','#65452c','#251c1c'][variant%6];const walk=Math.floor(frame)%2;const leg=walk?1:-1;pixel(7,30+leg,4,4,'#24293b');pixel(13,30-leg,4,4,'#24293b');pixel(6,18,12,13,'#2f3244');pixel(7,18,10,12,coat);pixel(5,21,3,8,skin);pixel(17,21,3,8,skin);pixel(8,7,9,12,'#241f27');pixel(8,8,9,9,skin);pixel(7,5,11,6,hair);pixel(6,9,3,5,hair);pixel(17,9,2,5,hair);if(dir!=='up'){pixel(9,12,2,2,'#332528');pixel(14,12,2,2,'#332528');pixel(11,16,3,1,'#9d514c')}else{pixel(7,12,10,5,hair);pixel(8,21,8,6,'#b78e55')}if(dir==='left')pixel(10,14,2,2,'#26191a');if(dir==='right')pixel(14,14,2,2,'#26191a');pixel(9,20,6,2,'#ffffff22');return c}
-const playerSprites={},npcSprites={};for(const d of ['up','down','left','right'])for(let f=0;f<2;f++){playerSprites[d+f]=sprite(0,d,f);for(let v=0;v<6;v++)npcSprites[v+d+f]=sprite(v,d,f)}
-function drawCharacter(x,y,dir,frame,v=0,s=1){ctx.fillStyle='rgba(15,23,31,.45)';ctx.beginPath();ctx.ellipse(x,y-1,13*s,4*s,0,0,Math.PI*2);ctx.fill();const im=v===0?playerSprites[dir+frame]:npcSprites[(v%6)+dir+frame];ctx.imageSmoothingEnabled=false;ctx.drawImage(im,x-14*s,y-39*s,28*s,40*s);ctx.imageSmoothingEnabled=true}
-function drawEnvironment(){ctx.save();ctx.translate(viewW/2-cam.x*scale,viewH/2-cam.y*scale);ctx.scale(scale,scale);
+// Pixel-art atlas: handcrafted four-frame directional sprites with consistent proportions.
+const dirs={down:0,left:1,right:2,up:3};
+function spriteScale(y,interior=false){return interior?1.05:clamp(.47+(y-175)/750*.25,.47,.72)}
+function drawCharacter(x,y,dir,frame,v=0,modifier=1){
+ const size=spriteScale(y,stage.mode==='interior')*modifier;
+ const w=48*size,h=64*size;
+ ctx.fillStyle='rgba(29,32,36,.27)';ctx.beginPath();ctx.ellipse(x,y-.8,11*size,3*size,0,0,Math.PI*2);ctx.fill();
+ if(spriteAtlasLoaded){
+  const ix=Math.floor(frame)%4,iy=(v%10)*4+(dirs[dir]??0);
+  ctx.imageSmoothingEnabled=false;
+  ctx.drawImage(spriteAtlas,ix*48,iy*64,48,64,Math.round(x-w/2),Math.round(y-h+4*size),w,h);
+  ctx.imageSmoothingEnabled=true;
+ }else{
+  ctx.fillStyle='#bb7b56';ctx.fillRect(x-4*size,y-33*size,8*size,10*size);
+  ctx.fillStyle=v?'#915679':'#2e63a0';ctx.fillRect(x-7*size,y-22*size,14*size,20*size);
+ }
+}
+function drawEnvironment(){
+ ctx.fillStyle='#224a5a';ctx.fillRect(0,0,viewW,viewH);
+ // When viewing the whole island, fill any aspect-ratio gutters with the same panorama,
+ // rather than leaving black bars or distorting the painted buildings.
+ if(overview&&stage.loaded&&WORLD.width*scale<viewW-2 || overview&&stage.loaded&&WORLD.height*scale<viewH-2){
+  const cover=Math.max(viewW/WORLD.width,viewH/WORLD.height);
+  const w=WORLD.width*cover,h=WORLD.height*cover;
+  ctx.globalAlpha=.32;ctx.drawImage(worldImage,(viewW-w)/2,(viewH-h)/2,w,h);ctx.globalAlpha=1;
+ }
+ ctx.save();ctx.translate(viewW/2-cam.x*scale,viewH/2-cam.y*scale);ctx.scale(scale,scale);
  if(stage.loaded)ctx.drawImage(worldImage,0,0,WORLD.width,WORLD.height);
  else{ctx.fillStyle='#69a3ad';ctx.fillRect(0,0,WORLD.width,WORLD.height)}
  const night=nightMode==='night'?1:nightMode==='sunset'?.47:nightMode==='morning'?.19:0;
@@ -126,8 +212,14 @@ function drawEnvironment(){ctx.save();ctx.translate(viewW/2-cam.x*scale,viewH/2-
  if(night>.05){const lamps=[[772,555],[897,550],[714,610],[935,640],[1204,508],[1320,499],[550,645],[1280,720],[1130,668],[1051,389],[568,403],[674,319],[1480,697]];for(const [x,y] of lamps){const r=32+(night*33)+Math.sin(clock*5+x)*3;const grad=ctx.createRadialGradient(x,y,0,x,y,r);grad.addColorStop(0,`rgba(255,202,109,${.5*night})`);grad.addColorStop(1,'rgba(255,178,85,0)');ctx.fillStyle=grad;ctx.fillRect(x-r,y-r,r*2,r*2)}}
  // In-world glint markers; existing painted category labels remain uncluttered.
  for(const c of categories){const p=nodes[c.entry],rad=10+Math.sin(clock*3+c.x)*2;ctx.strokeStyle=`rgba(255,241,169,${.55+.3*Math.sin(clock*3+c.x)})`;ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(p.x,p.y-8,rad,rad*.48,0,0,Math.PI*2);ctx.stroke();ctx.fillStyle='#fff0bd';ctx.font='15px Georgia';ctx.textAlign='center';ctx.fillText('✦',p.x,p.y-16+Math.sin(clock*2+c.y)*3)}
- for(const n of npcs){const bob=reducedMotion?0:Math.sin(clock*.85+n.x)*6;drawCharacter(n.x+bob,n.y,n.x%3===0?'left':'down',Math.floor(clock*2+n.y)%2,1+n.shade,.85)}
- drawCharacter(character.x,character.y,character.dir,Math.floor(character.step)%2,0,1.16);
+ if(new URLSearchParams(location.search).has('debugPaths')){
+  ctx.save();ctx.lineWidth=3;ctx.strokeStyle='#00ffbee6';
+  for(let i=0;i<nodes.length;i++)for(const j of nodes[i].links)if(j>i){ctx.beginPath();ctx.moveTo(nodes[i].x,nodes[i].y);ctx.lineTo(nodes[j].x,nodes[j].y);ctx.stroke();}
+  for(let i=0;i<nodes.length;i++){ctx.beginPath();ctx.fillStyle='#172e46';ctx.arc(nodes[i].x,nodes[i].y,10,0,Math.PI*2);ctx.fill();ctx.fillStyle='white';ctx.font='12px monospace';ctx.fillText(i,nodes[i].x-7,nodes[i].y+4)}
+  ctx.restore();
+ }
+ for(const n of npcs){const bob=reducedMotion?0:Math.sin(clock*.85+n.x)*6;drawCharacter(n.x+bob,n.y,n.x%3===0?'left':'down',Math.floor(clock*2+n.y)%4,1+n.shade,1)}
+ drawCharacter(character.x,character.y,character.dir,Math.floor(character.step)%4,0,1);
  if(seasonMode==='winter'||seasonMode==='spring'){for(const p of particles){let x=(p.x+Math.sin(clock*.3+p.seed)*19+WORLD.width)%WORLD.width;let y=(p.y+(clock*(seasonMode==='winter'?9:16)*p.v))%WORLD.height;ctx.fillStyle=seasonMode==='winter'?'#f8fbffbd':'#ffb6dad0';ctx.fillRect(x,y,seasonMode==='winter'?3:5,seasonMode==='winter'?3:2)}}
  ctx.restore();}
 function floorBlock(x,y,w,h,color){ctx.fillStyle=color;ctx.fillRect(x,y,w,h)}
@@ -164,16 +256,126 @@ function makeInterior(c){if(interiorCache[c.id])return interiorCache[c.id];const
  if(c.theme==='manga'){for(let i=0;i<10;i++){R(288+i*28,228,14,12,i%2?'#f0a5b4':'#ffffff')}}
  if(c.theme==='romance'){for(let i=0;i<14;i++){R(286+i*24,245,9,5,'#e78eaa')}}
  if(c.theme==='cafe'){for(let i=0;i<6;i++){R(322+i*33,416,15,16,'#e5c9a4')}}
+
+ // Premium hand-authored decorative layer: unique reading room identity per district.
+ const outline='#2b2a36',ivory='#fbe6b4',gold='#d7aa64';
+ function framed(x,y,w,h,col='#5c3c47'){
+  R(x-5,y-5,w+10,h+10,'#362f35');R(x-2,y-2,w+4,h+4,gold);R(x,y,w,h,col);
+ }
+ function chair(x,y,col='#8c5d51'){
+  R(x-12,y-17,37,37,outline);R(x-10,y-16,33,23,col);R(x-7,y-13,27,14,'#ffffff25');
+  R(x-14,y+6,39,13,outline);R(x-11,y+8,33,7,col);
+ }
+ function bookOpen(x,y,size=1){
+  R(x-2,y-2,38*size+4,25*size+4,'#514039');R(x,y,18*size,22*size,'#fff0d6');R(x+20*size,y,18*size,22*size,'#eed6ae');
+  R(x+19*size,y+1,2*size,20*size,'#9a6c53');
+  for(let i=0;i<3;i++){R(x+3*size,y+(5+i*5)*size,12*size,1*size,'#c1a18a');R(x+23*size,y+(5+i*5)*size,12*size,1*size,'#c1a18a')}
+ }
+ function vase(x,y,flower){
+  R(x-3,y+19,20,7,'#8a4b3c');R(x,y+4,14,17,'#bb7353');R(x+3,y+7,8,10,'#d49370');
+  R(x+6,y-18,3,26,'#547848');
+  for(let i=0;i<9;i++)R(x-7+((i*7)%28),y-20+((i*5)%15),5,5,i%3?'#628c55':flower);
+ }
+ function flowerArch(){
+  for(let i=0;i<26;i++){
+   let x=310+i*13,y=190-Math.sin(i/25*Math.PI)*31;
+   R(x,y,11,8,i%3?'#bc4b83':'#f1a5bb');R(x+2,y-2,6,4,'#f6ccdb');
+  }
+ }
+ function cushion(x,y,color){R(x-2,y+8,53,16,'#362f3e');R(x,y,49,12,color);R(x+6,y+3,32,2,'#ffffff5a')}
+ function table(x,y){
+  R(x+9,y+14,10,51,'#5b4436');R(x-28,y-9,88,27,outline);R(x-25,y-10,83,22,'#9e6e48');R(x-21,y-7,75,4,'#d9a66e')
+ }
+ // floor corner trim, set into stone tiles and aged timber
+ for(let yy=313; yy<554; yy+=48){
+  R(118,yy,724,2,'#f0d9ad26');
+ }
+ for(let xx=140; xx<828; xx+=54){R(xx,545,24,2,'#fbe8b24a')}
+ if(c.theme==='garden'){
+  flowerArch();vase(346,328,'#f7bd80');vase(599,320,'#c59cb9');
+  cushion(328,410,'#68977d');cushion(590,413,'#9cbb81');
+  bookOpen(469,403,.85);
+  framed(364,122,60,81,'#86b6af');R(375,179,40,15,'#5f9474');
+  R(482,286,42,37,'#986a4b');R(488,292,30,25,'#cfaa67');R(497,298,8,8,'#e8b589');
+ }
+ if(c.theme==='manga'){
+  // Noren curtains, lanterns, scrolls and indigo mats
+  for(let i=0;i<5;i++){
+   const x=350+i*58; R(x,109,39,55,i%2?'#b06a87':'#835a9e');
+   R(x+7,118,26,3,'#f5d9d5');R(x+10,129,20,2,'#f5d9d5')
+  }
+  for(let i=0;i<5;i++){let x=322+i*70;R(x,151,2,20,'#4a3239');R(x-11,169,26,31,'#efb1bc');R(x-11,177,26,3,'#b95e7f');R(x,170,2,28,'#d67591')}
+  cushion(306,433,'#b55a87');cushion(626,432,'#685eac');
+  for(let i=0;i<3;i++)framed(343+i*91,289,53,58,['#765d9f','#aa6290','#537c9f'][i]);
+ }
+ if(c.theme==='cosmos'){
+  // A luminous planetarium lives inside the fantasy/SF wing
+  framed(394,102,172,134,'#172d56');
+  let cg=g.createRadialGradient(475,169,2,475,169,94);
+  cg.addColorStop(0,'#e5bbee');cg.addColorStop(.28,'#6a79ba');cg.addColorStop(1,'#162749');g.fillStyle=cg;g.fillRect(395,103,170,132);
+  g.strokeStyle='#b1bfe8';g.lineWidth=5;g.beginPath();g.ellipse(476,175,73,35,-.2,0,Math.PI*2);g.stroke();
+  g.fillStyle='#e8ca90';g.beginPath();g.arc(478,172,24,0,Math.PI*2);g.fill();
+  for(let i=0;i<23;i++)R(409+(i*37)%147,111+(i*19)%115,2+(i%2),2,'#fff4c5');
+  // telescope in the foreground
+  R(553,345,16,100,'#75634e');R(517,319,116,20,'#293e61');R(527,314,103,11,'#b3a46f');R(521,315,7,28,'#c6c5a8');
+  bookOpen(392,400,1);
+ }
+ if(c.theme==='romance'){
+  flowerArch();cushion(325,429,'#b5667f');cushion(586,428,'#a45c7c');
+  for(let i=0;i<12;i++){R(314+i*31,294+Math.floor(Math.sin(i*1.7)*8),7,7,'#ca5887');R(316+i*31,292+Math.floor(Math.sin(i*1.7)*8),4,4,'#f8b3cd')}
+  framed(432,120,96,76,'#854d70');g.fillStyle='#f2b7cb';g.font='38px serif';g.fillText('♥',465,169);
+  bookOpen(474,407,.9);
+ }
+ if(c.theme==='noir'){
+  framed(425,120,116,95,'#3e394a');
+  for(let i=0;i<8;i++){R(433+(i*33)%90,130+(i*37)%70,23,16,i%2?'#d6be91':'#bca9a0');R(436+(i*33)%90,139+(i*37)%70,16,2,'#786d65')}
+  R(445,326,8,75,'#443949');R(447,324,61,12,'#746451');R(500,319,14,37,'#bc9d70');
+  R(494,307,22,12,'#eacb85');R(513,352,35,13,'#4f3d37');
+  framed(338,297,53,72,'#323749');
+ }
+ if(c.theme==='study'||c.theme==='library'){
+  // Atlas globes, old parchment, reading lecterns
+  R(552,310,6,91,'#654d39');R(531,393,47,8,'#5a3d2f');
+  g.fillStyle='#487e7c';g.beginPath();g.arc(553,304,28,0,Math.PI*2);g.fill();
+  R(545,283,12,14,'#88b39c');R(558,307,18,8,'#9baa76');R(539,312,9,12,'#9baa76');
+  g.strokeStyle='#e1c083';g.lineWidth=3;g.beginPath();g.arc(553,304,32,0,Math.PI*2);g.stroke();
+  bookOpen(432,403,1);
+  framed(359,120,61,76,'#6f7e6e');
+ }
+ if(c.theme==='shop'){
+  for(let i=0;i<5;i++){
+   let x=342+i*57,y=307+(i%2)*12;
+   R(x-2,y-2,48,48,'#594239');R(x,y,44,43,['#97b5a4','#bb8493','#e2c178','#7c9eb6','#cd9c7b'][i]);
+   R(x+18,y,7,43,'#e9d9ba');R(x,y+17,44,7,'#e9d9ba');
+   R(x+8,y-8,12,10,'#efd5a1');R(x+23,y-8,12,10,'#efd5a1');
+  }
+  framed(413,123,128,70,'#54847d');
+  R(444,142,64,29,'#d7c595');R(455,150,43,5,'#648c86');
+ }
+ if(c.theme==='cafe'){
+  table(361,332);table(541,341);R(360,309,19,19,'#d5bd97');R(360,310,17,11,'#fff0d2');
+  for(let i=0;i<3;i++){let x=386+i*38;R(x,370,13,19,'#e8dab7');R(x+4,378,4,4,'#ad8773')}
+  cushion(320,432,'#ad7f53');cushion(613,431,'#bb9965');
+  for(let i=0;i<9;i++){let x=338+i*36;R(x,149+(i%3)*4,5,4,i%2?'#ffdea5':'#fbc2a0')}
+ }
+ // Pixel skylight ambience, light shafts, and hand-painted edge vignette (no CSS blur).
+ let lg=g.createLinearGradient(0,225,0,500);
+ lg.addColorStop(0,'#fff3bd12');lg.addColorStop(.5,'#ffe0ae05');lg.addColorStop(1,'#38232115');
+ g.fillStyle=lg;g.fillRect(128,226,704,324);
+ for(let i=0;i<18;i++){
+  let x=158+i*39,y=270+((i*71)%205);
+  R(x,y,2,2,i%3?'#fff1c442':'#f9e5b980');
+ }
  interiorCache[c.id]=off;return off}
 function renderInterior(){const c=stage.inside;if(!c)return;ctx.fillStyle='#112535';ctx.fillRect(0,0,viewW,viewH);const ratio=Math.min(viewW/960,viewH/610)*1.02;const w=960*ratio,h=610*ratio,l=(viewW-w)/2,top=(viewH-h)/2;ctx.drawImage(makeInterior(c),l,top,w,h);ctx.save();ctx.translate(l,top);ctx.scale(ratio,ratio);
  // Lively candlelight and floating dust within a detailed interior.
  for(const x of [269,688]){let g=ctx.createRadialGradient(x,277,2,x,277,102);g.addColorStop(0,`rgba(255,218,124,${.22+Math.sin(clock*4+x)*.04})`);g.addColorStop(1,'rgba(255,202,121,0)');ctx.fillStyle=g;ctx.fillRect(x-102,170,204,205)}
  for(let i=0;i<20;i++){const px=235+(i*37)%530,py=142+(clock*(i%3+1)*7+i*47)%290;ctx.fillStyle=`rgba(255,245,192,${.2+.2*Math.sin(clock*2+i)})`;ctx.fillRect(px,py,2,2)}
- drawCharacter(476,326,'down',0,4,1.7);drawCharacter(character.insideX,character.insideY,character.dir,Math.floor(character.step)%2,0,1.8);
+ drawCharacter(476,326,'down',0,4,1);drawCharacter(character.insideX,character.insideY,character.dir,Math.floor(character.step)%4,0,1);
  ctx.fillStyle='#143345da';ctx.fillRect(360,565,240,25);ctx.font='bold 14px DM Sans';ctx.textAlign='center';ctx.fillStyle='#f9dba3';ctx.fillText('E · DÉCOUVRIR LES LIVRES',480,582);ctx.restore();}
 function frame(ts){if(!last)last=ts;let dt=Math.min(.05,(ts-last)/1000);last=ts;ctx.setTransform(dpr,0,0,dpr,0,0);update(dt);if(stage.mode==='world')drawEnvironment();else renderInterior();requestAnimationFrame(frame)}
-const pressed={};
-function movingDirection(d){if(stage.mode!=='world')return;const current=chooseNode(character.x,character.y),p=nodes[current],map={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}},vec=map[d];let options=p.links.map(id=>({id,dir:{x:nodes[id].x-p.x,y:nodes[id].y-p.y}}));options=options.map(v=>({...v,score:(v.dir.x*vec.x+v.dir.y*vec.y)/Math.hypot(v.dir.x,v.dir.y)})).sort((a,b)=>b.score-a.score);if(options.length&&options[0].score>.13)routeTo(options[0].id);}
+const pressed={};let lastHeldTurn=0;
+function movingDirection(d){if(stage.mode!=='world'||character.route.length)return;const current=chooseNode(character.x,character.y),p=nodes[current],map={up:{x:0,y:-1},down:{x:0,y:1},left:{x:-1,y:0},right:{x:1,y:0}},vec=map[d];let options=p.links.map(id=>({id,dir:{x:nodes[id].x-p.x,y:nodes[id].y-p.y}}));options=options.map(v=>({...v,score:(v.dir.x*vec.x+v.dir.y*vec.y)/Math.hypot(v.dir.x,v.dir.y)})).sort((a,b)=>b.score-a.score);if(options.length&&options[0].score>.13)routeTo(options[0].id);}
 function interact(){if(stage.mode==='interior'){openCategory(stage.inside);return}let near=null,best=66;for(const c of categories){const d=dist(character,nodes[c.entry]);if(d<best){best=d;near=c}}if(near){enter(near);return}for(const n of npcs){if(dist(character,n)<70){message(`${n.name} : « ${n.t} »`,5500);song(610);return}}message('Explorez les chemins jusqu’aux entrées scintillantes des quartiers.');}
 function pointer(e){const rect=canvas.getBoundingClientRect();const x=e.clientX-rect.left,y=e.clientY-rect.top;return stage.mode==='world'?screenToWorld(x,y):{x:(x-(viewW-960*Math.min(viewW/960,viewH/610)*1.02)/2)/(Math.min(viewW/960,viewH/610)*1.02),y:(y-(viewH-610*Math.min(viewW/960,viewH/610)*1.02)/2)/(Math.min(viewW/960,viewH/610)*1.02)}}
 canvas.addEventListener('click',e=>{if($('#welcome')&&!$('#welcome').hidden)return;const p=pointer(e);if(stage.mode==='interior'){if(p.y>527&&p.x>414&&p.x<540){leave();return}character.insideX=clamp(p.x,185,760);character.insideY=clamp(p.y,408,565);return}const targets=categories.map(c=>({c,d:Math.hypot(c.x-p.x,c.y-p.y)})).sort((a,b)=>a.d-b.d);if(targets[0].d<98){travelTo(targets[0].c.id);return}const k=chooseNode(p.x,p.y);routeTo(k,()=>{for(const n of npcs){if(dist(character,n)<59){message(`${n.name} : « ${n.t} »`,4800);return}}});});
@@ -182,6 +384,7 @@ document.addEventListener('keydown',e=>{if(e.target.closest('input,textarea,sele
 document.addEventListener('keyup',e=>{delete pressed[e.key]});window.addEventListener('blur',()=>Object.keys(pressed).forEach(k=>delete pressed[k]));
 for(const btn of document.querySelectorAll('[data-dir]')){const keys={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'};const d=btn.dataset.dir;btn.addEventListener('pointerdown',e=>{e.preventDefault();pressed[keys[d]]=true;if(stage.mode==='world')movingDirection(d)});for(const ev of ['pointerup','pointercancel','pointerleave'])btn.addEventListener(ev,()=>delete pressed[keys[d]])}
 $('#touch-enter').addEventListener('click',interact);
+$('#overview').addEventListener('click',()=>setOverview(!overview));
 $('#recenter').addEventListener('click',()=>{if(stage.mode==='interior')leave();routeTo(0);song(650)});
 $('#time').addEventListener('change',paintTime);$('#season').addEventListener('change',paintTime);
 setInterval(()=>{if($('#time').value==='auto'||$('#season').value==='auto')paintTime()},60000);
