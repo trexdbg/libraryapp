@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#101c24" />
-  <meta name="description" content="Explorez une démo Three.js d'une librairie méditerranéenne en véritable 3D isométrique : dôme, toits de terre cuite, jardins, fontaines et quartiers littéraires." />
-  <title>La Librairie des Mondes — Laboratoire 3D</title>
+  <meta name="description" content="Explorez une cité-librairie méditerranéenne en 3D isométrique : dôme vitré, architecture provençale, jardins, librairies et mer animée." />
+  <title>La Librairie des Mondes — Riviera Edition · Décor 3D</title>
   <link rel="stylesheet" href="./style.css" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <script type="importmap">
@@ -18,26 +18,26 @@
     <div class="atmosphere" aria-hidden="true"></div>
     <header class="header">
       <a class="brand" href="../" title="Retour à l'application"><span class="brand-mark">✧</span><span><small>UN MONDE DE LECTURES</small><b>La Librairie <i>des Mondes</i></b></span></a>
-      <div class="header-right"><span class="live"><span></span> LABORATOIRE 3D · THREE.JS</span><a href="../" class="backlink">Retour au site ↗</a></div>
+      <div class="header-right"><span class="live"><span></span> RIVIERA EDITION · THREE.JS</span><a href="../" class="backlink">Retour au site ↗</a></div>
     </header>
     <section class="hero" aria-label="Présentation">
       <span class="kicker"><i></i> UN LIEU, MILLE HISTOIRES</span>
-      <h1>Entrez dans<br><em>l’imaginaire.</em></h1>
-      <p>Un véritable village-librairie méditerranéen, sculpté en 3D. Approchez-vous du dôme, traversez les jardins et explorez chaque univers.</p>
+      <h1>Un village.<br><em>Mille histoires.</em></h1>
+      <p>Au bord de la Méditerranée, explorez des ruelles pavées, des maisons aux toits de tuiles et des milliers de livres. Votre prochaine aventure commence ici.</p>
       <div class="hero-actions"><button id="visitBtn" class="primary">Explorer le village <span>↗</span></button><button id="resetBtn" class="quiet" aria-label="Revenir à la vue générale">↶ Vue d'ensemble</button></div>
     </section>
     <div id="labels" class="labels" aria-label="Quartiers à explorer"></div>
-    <aside class="scene-note">✣ &nbsp; CAP SUR LA MÉDITERRANÉE &nbsp; / &nbsp; VILLAGE IMAGINAIRE</aside>
+    <aside class="scene-note">✣ &nbsp; PROVENCE · ARCHITECTURE IMAGINAIRE · LIBRAIRIE DES MONDES</aside>
     <footer class="footer">
       <div class="environment"><span id="skyIcon">◒</span><span><b id="skyName">L'heure dorée</b><small id="skySubtitle">Éclairage cinématographique</small></span></div>
       <div class="controls">
         <label><span>AMBIANCE</span><select id="time"><option value="golden">Heure dorée</option><option value="day">Plein jour</option><option value="dusk">Crépuscule</option><option value="night">Nuit</option><option value="auto">Heure locale</option></select></label>
         <label><span>SAISON</span><select id="season"><option value="summer">Été</option><option value="spring">Printemps</option><option value="autumn">Automne</option><option value="winter">Hiver</option></select></label>
-        <button id="quality" title="Activer/désactiver les effets avancés" aria-pressed="true">✦ Effets</button>
+        <button id="photoMode" title="Masquer les panneaux pour contempler le décor" aria-pressed="false">◈ Immersion</button><button id="quality" title="Activer/désactiver les effets avancés" aria-pressed="true">✦ Effets</button>
         <button id="fullscreen" title="Plein écran">⤢</button>
       </div>
     </footer>
-    <div class="hint" id="hint">GLISSER POUR ORBITER <span>·</span> MOLETTE POUR ZOOMER <span>·</span> CLIQUER SUR UN QUARTIER</div>
+    <div class="hint" id="hint">TOURNEZ LA CAMÉRA <span>·</span> ZOOMEZ POUR EXPLORER <span>·</span> 12 QUARTIERS À DÉCOUVRIR</div>
     <section class="detail" id="detail" role="dialog" aria-modal="false" aria-labelledby="detailTitle" hidden>
       <button id="closeDetail" class="close" aria-label="Fermer">×</button>
       <div id="detailIcon" class="detail-icon">✧</div>
@@ -47,7 +47,7 @@
       <div id="books" class="books"></div>
       <p class="notice">Sélection éditoriale de démonstration · Aucun stock réel annoncé.</p>
     </section>
-    <div id="loading" class="loading" role="status"><span class="loading-mark">✧</span><h2>Le village s'éveille</h2><p>Une vraie scène 3D prend forme…</p><span class="loading-track"><span></span></span></div>
+    <div id="loading" class="loading" role="status"><span class="loading-mark">✧</span><h2>Le village s'éveille</h2><p>La cité méditerranéenne prend vie…</p><span class="loading-track"><span></span></span></div>
     <div id="error" class="error" hidden><h2>WebGL indisponible</h2><p>Ce navigateur ne parvient pas à démarrer la scène. Les quartiers restent accessibles depuis notre librairie.</p><a href="../">Revenir à la librairie</a></div>
   </main>
   <script>
@@ -60,5 +60,14 @@
     }, 22000);
   </script>
   <script type="module" src="./main.js"></script>
+  <script>
+    // If an external module fails before initialization, avoid an endless loading overlay.
+    setTimeout(() => {
+      if (document.body.dataset.sceneReady === 'true') return;
+      document.getElementById('loading')?.classList.add('done');
+      const error = document.getElementById('error');
+      if (error) { error.hidden = false; error.querySelector('h2').textContent = 'Décor 3D indisponible'; }
+    }, 18000);
+  </script>
 </body>
 </html>

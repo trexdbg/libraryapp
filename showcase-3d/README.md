@@ -1,26 +1,32 @@
-# La Librairie des Mondes — Showcase 3D Three.js
+# La Librairie des Mondes · Riviera Edition
 
-A standalone isometric 3D environmental showcase for the library project, placed at `/showcase-3d/` within GitHub Pages. Unlike earlier versions, **no generated illustration or flat background is used for the town**: all buildings, dome glazing, roof tiles, stairs, balustrades, fountain, cliffs, bridges and vegetation are Three.js geometry.
+Scène d'exploration 3D isométrique en **Three.js** pour GitHub Pages. Accès public prévu : https://trexdbg.github.io/libraryapp/showcase-3d/
 
-## Launch
+## Évolutions de cette version
 
-Serve statically (`python3 -m http.server 8000`) then open `/showcase-3d/`. Three.js 0.180.0 and its official post-processing addons load from jsDelivr. No build tool or backend is needed. GitHub Pages can host it as is.
+- Un second module `art-direction.js` construit **de la vraie géométrie 3D** de finition : des tuiles de toiture instanciées, des volets et balcons, des arcades, des modénatures, des garde-corps, des jardinières, des guirlandes lumineuses, des étals de livres et un décor central enrichi.
+- Refonte de la lumière (exposition et bloom plus retenus), fog moins chargé, caméra légèrement plus aplatie et textures existantes conservées.
+- 12 zones littéraires localisables, chacune avec un panneau de démonstration ; ni prix ni stock fictifs.
+- Mode « Immersion » pour masquer l'interface et juger le décor sans obstacles visuels.
+- Préservation des versions précédentes dans l'historique Git et de l'application principale dans `/`.
+- Aucun asset externe binaire : géométrie et textures peintes dans Canvas. La seule dépendance externe est Three.js depuis un CDN.
 
-## Controls
+## Démarrer et tester
 
-- Drag to orbit; scroll/pinch to zoom.
-- Select the places anchored to actual 3D world points to focus on a literary district.
-- Choose day, golden hour, dusk or night, and change season.
-- Toggle bloom post-processing and fullscreen.
-- Use the home camera button to return to the village vista.
+Depuis la racine du projet :
 
-## Performance
+```sh
+python3 -m http.server 8080
+```
 
-- Geometry is in Three.js, with procedurally drawn canvas-based surface textures.
-- Leaf and flower clusters use instancing.
-- Resolution and bloom default to conservative settings on touch/low-core devices.
-- Scene is meant as an **art-direction prototype**, not an actual AAA production environment. A production-quality scene would still benefit from designed / baked GLB meshes, authored PBR textures, LODs, GPU profiling and device testing.
+Puis ouvrir `http://localhost:8080/showcase-3d/` après l'installation des fichiers dans ce sous-dossier. Internet est nécessaire pour télécharger les modules Three.js depuis `cdn.jsdelivr.net`. Pour un usage de production hors-ligne, envisager de figer les dépendances dans le dépôt.
 
-## Integration direction
+## Contrôles
 
-This is an optional, independent 3D landing experience for the existing app. The book selections are editorial demonstration data, **not store availability**; replace these with real catalog records and affiliate URLs via the same product API that will later serve physical inventory.
+Glisser = tourner la caméra. Molette/pincement = zoom. Cliquer sur un rayon = vue rapprochée et sélection littéraire. Contrôles pour saisons, heure locale ou choisie, effets graphiques, immersion et plein écran.
+
+## Portée et limites
+
+Il s'agit d'une **itération de qualité visuelle**, pas d'un jeu AAA photoréaliste. Le principal gain est la richesse du modelé des bâtiments et du premier plan ; un rendu de niveau studio nécessiterait ensuite une phase de modélisation Blender, UV/PBR, assets artistiques, optimisation GPU et QA sur de véritables machines.
+
+Vérifications : syntaxe JavaScript, tests de présence des fichiers et inspection du code. Un rendu final visuel n'a pas pu être capturé automatiquement dans cet environnement lorsque le CDN externe est indisponible.

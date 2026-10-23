@@ -1,3 +1,4 @@
+import {addArchitecturalFinishes} from './art-direction.js';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
@@ -20,16 +21,16 @@ const choice=a=>a[Math.floor(rnd(0,a.length))];
 const C = (c) => new THREE.Color(c);
 const scene=new THREE.Scene();
 scene.background=new THREE.Color('#83adc4');
-scene.fog=new THREE.FogExp2('#a7c0c5',0.0066);
-const camera=new THREE.PerspectiveCamera(42,1,.1,1600);
-camera.position.set(76,59,89);
+scene.fog=new THREE.FogExp2('#a7c0c5',0.0038);
+const camera=new THREE.PerspectiveCamera(38,1,.1,1600);
+camera.position.set(72,56,86);
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,lowPower?1.3:1.75));
 renderer.shadowMap.enabled=true;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
 renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.2;
+renderer.toneMappingExposure=1.03;
 renderer.setClearColor('#a5d0d7');
 viewport.appendChild(renderer.domElement);
 const orbit=new OrbitControls(camera,renderer.domElement);
@@ -43,7 +44,7 @@ orbit.enablePan=false;
 orbit.autoRotate=false;
 const composer=new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene,camera));
-const bloom=new UnrealBloomPass(new THREE.Vector2(1,1),.33,.45,.94);
+const bloom=new UnrealBloomPass(new THREE.Vector2(1,1),.19,.37,.94);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
 let bloomEnabled=!lowPower;
@@ -118,8 +119,8 @@ const sea=add(new THREE.PlaneGeometry(1400,1400,180,180),new THREE.ShaderMateria
  fragmentShader:`uniform float uTime;uniform float uNight;uniform float uSun;varying vec3 vP;varying vec2 vUv;void main(){float w=sin(vP.x*.23+uTime*.8+sin(vP.y*.12))*cos(vP.y*.19-uTime*.62);float ww=sin((vP.x+vP.y)*.51+uTime*1.45);float foam=smoothstep(.72,1.,w*.62+ww*.36);vec3 aqua=mix(vec3(.02,.25,.31),vec3(.06,.43,.47),.5+.5*w);aqua=mix(aqua,vec3(.12,.56,.62),foam*.43);aqua+=foam*vec3(.3,.35,.28);aqua=mix(aqua,vec3(.012,.06,.16),uNight*.8);aqua*=.8+uSun*.3;gl_FragColor=vec4(aqua,1.);}`
 }),[0,-5.5,0]);sea.rotation.x=-Math.PI/2;sea.castShadow=false;sea.receiveShadow=true;
 
-const hemi=new THREE.HemisphereLight('#d2e7ff','#946d4a',2.0);scene.add(hemi);
-const sun=new THREE.DirectionalLight('#ffdda5',3.0);sun.position.set(-55,83,39);sun.castShadow=true;sun.shadow.mapSize.set(lowPower?1024:2048,lowPower?1024:2048);sun.shadow.camera.left=-86;sun.shadow.camera.right=86;sun.shadow.camera.top=84;sun.shadow.camera.bottom=-84;sun.shadow.camera.near=1;sun.shadow.camera.far=200;sun.shadow.bias=-.00017;sun.shadow.normalBias=.025;scene.add(sun);
+const hemi=new THREE.HemisphereLight('#d2e7ff','#946d4a',1.4);scene.add(hemi);
+const sun=new THREE.DirectionalLight('#ffdda5',2.7);sun.position.set(-55,83,39);sun.castShadow=true;sun.shadow.mapSize.set(lowPower?1024:2048,lowPower?1024:2048);sun.shadow.camera.left=-86;sun.shadow.camera.right=86;sun.shadow.camera.top=84;sun.shadow.camera.bottom=-84;sun.shadow.camera.near=1;sun.shadow.camera.far=200;sun.shadow.bias=-.00017;sun.shadow.normalBias=.025;scene.add(sun);
 const fill=new THREE.DirectionalLight('#74a5ce',.8);fill.position.set(50,34,-40);scene.add(fill);
 
 function island(coords,top,depth=8,material=M.cliff){const shape=new THREE.Shape();coords.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();const geo=new THREE.ExtrudeGeometry(shape,{depth,steps:1,bevelEnabled:true,bevelThickness:.65,bevelSize:.7,bevelSegments:2,curveSegments:3});geo.rotateX(-Math.PI/2);const mesh=add(geo,material,[0,top-depth,0]);mesh.receiveShadow=true;return mesh;}
@@ -498,6 +499,8 @@ boat(-79,37,.9);boat(71,10,.7);boat(-100,-9,.7);boat(103,65,.8);
 const moteGeo=new THREE.BufferGeometry();const motePositions=new Float32Array(210*3);for(let i=0;i<210;i++){motePositions[i*3]=rnd(-45,45);motePositions[i*3+1]=rnd(8,34);motePositions[i*3+2]=rnd(-27,29)}moteGeo.setAttribute('position',new THREE.BufferAttribute(motePositions,3));
 const motes=new THREE.Points(moteGeo,new THREE.PointsMaterial({color:'#f7dfac',size:.17,transparent:true,opacity:.75,depthWrite:false}));scene.add(motes);
 animated.push(t=>{motes.rotation.y=.008*Math.sin(t*.1);motes.material.opacity=.35+.33*Math.sin(t*.4)**2});
+// Distinctive architectural art direction, including thousands of actual tile meshes.
+const finishes=addArchitecturalFinishes({THREE,scene,M,box,cyl,sph,curveTube,mat,rnd,animated,lowPower,pointLight});
 // Author-defined interactive 3D viewpoints; places are real world coordinates.
 const districtData=[
  {id:'jeunesse',name:'Jeunesse',icon:'✷',color:'#638754',point:[-33,16,-18],cam:[-18,17,-5],description:'Dans les jardins de la librairie : albums illustrés, premiers romans et aventures à partager.',books:[['Le Petit Prince','Antoine de Saint-Exupéry'],['Matilda','Roald Dahl']]},
@@ -506,11 +509,17 @@ const districtData=[
  {id:'fantasy',name:'Fantasy & SF',icon:'✧',color:'#5278b7',point:[31,17,-14],cam:[29,13,-17],description:'Observatoire des mondes possibles, pour lire au-delà de l’horizon et des étoiles.',books:[['Dune','Frank Herbert'],['Le Hobbit','J. R. R. Tolkien']]},
  {id:'romance',name:'Romance',icon:'♡',color:'#bf6679',point:[35,15,7],cam:[35,8,8],description:'Des jardins fleuris aux lectures passionnées : une terrasse où l’on tombe amoureux des histoires.',books:[['Orgueil et Préjugés','Jane Austen'],['Les Sept Maris d’Evelyn Hugo','Taylor Jenkins Reid']]},
  {id:'papeterie',name:'Papeterie & cadeaux',icon:'✦',color:'#5b9b90',point:[28,14,27],cam:[27,8,27],description:'Carnets, cartes, stylos et idées cadeaux dans notre future boutique.',books:[]},
- {id:'chroniques',name:'Chroniques & café',icon:'☷',color:'#b38959',point:[-30,13,27],cam:[-30,8,27],description:'Un café imaginaire dédié aux lectures et aux critiques, bientôt relié à notre catalogue.',books:[]}
+ {id:'chroniques',name:'Chroniques & café',icon:'☷',color:'#b38959',point:[-30,13,27],cam:[-30,8,27],description:'Un café imaginaire dédié aux lectures et aux critiques, bientôt relié à notre catalogue.',books:[]},
+ {id:'polar',name:'Polar & Thriller',icon:'⌕',color:'#896575',point:[39,11,5],cam:[37,8,3],description:'La ruelle des mystères : une sélection de polars et thrillers.',books:[['Le Crime de l’Orient-Express','Agatha Christie']]},
+ {id:'bienetre',name:'Bien-être & nature',icon:'❀',color:'#6b947c',point:[-42,11,-7],cam:[-39,8,-8],description:'Des lectures pour cultiver l’équilibre et le jardin.',books:[['La Vie secrète des arbres','Peter Wohlleben']]},
+ {id:'histoire',name:'Histoire & société',icon:'♜',color:'#ae8969',point:[0,14,29],cam:[1,8,29],description:'Essais, histoire et sciences humaines.',books:[['Sapiens','Yuval Noah Harari']]},
+ {id:'bd',name:'BD & Comics',icon:'✎',color:'#b8835b',point:[-40,11,5],cam:[-40,8,5],description:'Bandes dessinées et romans graphiques.',books:[['Astérix le Gaulois','René Goscinny & Albert Uderzo']]},
+ {id:'retrait',name:'Retrait commandes',icon:'▣',color:'#5f9996',point:[25,11,31],cam:[25,8,30],description:'Bientôt, vos livres réservés en ligne seront à retirer en boutique.',books:[]}
+ 
 ];
 for(const d of districtData){const label=document.createElement('button');label.className='label';label.type='button';label.style.setProperty('--tint',d.color);label.innerHTML=`<span class="label-icon">${d.icon}</span><strong>${d.name}</strong><span>↗</span>`;label.setAttribute('aria-label','Découvrir '+d.name);label.addEventListener('click',()=>focusDistrict(d));labelsRoot.appendChild(label);categories.push({...d,element:label});}
 // High-end interactive camera and cinematic day / night transitions.
-const homeTarget=v3(0,8,2),homePosition=v3(72,59,83);
+const homeTarget=v3(0,8,2),homePosition=v3(72,56,86);
 let cameraTween=null;
 function flyTo(target,range=57){
  const direction=camera.position.clone().sub(orbit.target).normalize();
@@ -522,27 +531,28 @@ function focusDistrict(d){
  $('#detailTitle').textContent=d.name;$('#detailText').textContent=d.description;$('#detailIcon').textContent=d.icon;
  $('#books').innerHTML=d.books.length?d.books.map((b,i)=>`<div class="book"><span class="book-spine" style="--tint:${i%2?'#5a7a74':d.color}">✧</span><div><strong>${b[0]}</strong><small>${b[1]}</small></div></div>`).join(''):'<p>Notre futur catalogue présentera ici les livres et produits de ce rayon.</p>';
  $('#detail').hidden=false;
- flyTo(d.cam,53);
+ flyTo(d.cam,53);document.body.classList.add('exploring');
 }
-$('#visitBtn').addEventListener('click',()=>{flyTo([0,13,-10],53);$('#detail').hidden=true});
-$('#resetBtn').addEventListener('click',()=>{$('#detail').hidden=true;resetCamera()});
+$('#visitBtn').addEventListener('click',()=>{flyTo([0,13,-10],53);$('#detail').hidden=true;document.body.classList.add('exploring')});
+$('#resetBtn').addEventListener('click',()=>{$('#detail').hidden=true;document.body.classList.remove('exploring');resetCamera()});
 $('#closeDetail').addEventListener('click',()=>{$('#detail').hidden=true;resetCamera()});
 $('#fullscreen').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen()}catch{}});
 $('#quality').addEventListener('click',()=>{bloomEnabled=!bloomEnabled;$('#quality').setAttribute('aria-pressed',String(bloomEnabled));$('#quality').textContent=bloomEnabled?'✦ Effets':'✧ Léger'});
+$('#photoMode').addEventListener('click',()=>{const active=document.body.classList.toggle('photo-mode');$('#photoMode').setAttribute('aria-pressed',String(active));$('#photoMode').textContent=active?'◈ Interface':'◈ Immersion';});
 function getMood(){const t=$('#time').value;if(t!=='auto')return t;const h=new Date().getHours();return h<6||h>=21?'night':h>=18?'dusk':h<11?'golden':'day'}
 function lightMood(mood){
  const moods={
- golden:{name:'L’heure dorée',sub:'Une fin d’après-midi méditerranéenne',icon:'◒',ambient:'#c9ddf2',sun:'#ffd39b',intensity:3.1,hemi:1.85,night:0,sunFactor:.90,exposure:1.14,lamp:1.0,fog:'#a7bbc7'},
- day:{name:'Sous le soleil',sub:'Un village baigné de lumière',icon:'☀',ambient:'#d9edff',sun:'#fff2d2',intensity:3.45,hemi:2.15,night:0,sunFactor:1,exposure:1.25,lamp:.45,fog:'#a8cbd0'},
- dusk:{name:'Le village s’illumine',sub:'Dernières lueurs sur les façades',icon:'✧',ambient:'#b5bfd9',sun:'#ffae7b',intensity:1.7,hemi:1.0,night:.16,sunFactor:.55,exposure:1.19,lamp:2.4,fog:'#667c99'},
- night:{name:'Sous les étoiles',sub:'Lanternes, vitres et ciel d’encre',icon:'☾',ambient:'#5c82bd',sun:'#99bde3',intensity:.52,hemi:.45,night:1,sunFactor:.13,exposure:1.12,lamp:4.2,fog:'#172b51'}
+ golden:{name:'L’heure dorée',sub:'Une fin d’après-midi méditerranéenne',icon:'◒',ambient:'#c9ddf2',sun:'#ffd39b',intensity:2.5,hemi:1.4,night:0,sunFactor:.90,exposure:1.02,lamp:1.0,fog:'#a7bbc7'},
+ day:{name:'Sous le soleil',sub:'Un village baigné de lumière',icon:'☀',ambient:'#d9edff',sun:'#fff2d2',intensity:2.85,hemi:1.65,night:0,sunFactor:1,exposure:1.08,lamp:.45,fog:'#a8cbd0'},
+ dusk:{name:'Le village s’illumine',sub:'Dernières lueurs sur les façades',icon:'✧',ambient:'#b5bfd9',sun:'#ffae7b',intensity:1.45,hemi:.9,night:.16,sunFactor:.55,exposure:1.08,lamp:2.4,fog:'#667c99'},
+ night:{name:'Sous les étoiles',sub:'Lanternes, vitres et ciel d’encre',icon:'☾',ambient:'#5c82bd',sun:'#99bde3',intensity:.48,hemi:.45,night:1,sunFactor:.13,exposure:1.02,lamp:4.2,fog:'#172b51'}
  };
  const m=moods[mood]||moods.golden;
  hemi.color.set(m.ambient);hemi.intensity=m.hemi;
  sun.color.set(m.sun);sun.intensity=m.intensity;
  fill.intensity=mood==='night'?1.7:.8;
  renderer.toneMappingExposure=m.exposure;
- lights.forEach((l,i)=>{l.intensity=(i===0?3:1.3)*m.lamp});
+ lights.forEach((l,i)=>{l.intensity=(i===0?3:1.3)*m.lamp});finishes.shopLights.forEach(l=>l.intensity=(mood==='night'?2.6:mood==='dusk'?1.6:.45));
  M.darkWindow.emissiveIntensity=mood==='night'?1.65:mood==='dusk'?.95:.27;
  skyUniforms.uNight.value=m.night;skyUniforms.uSun.value=m.sunFactor;
  seaUniforms.uNight.value=m.night;seaUniforms.uSun.value=m.sunFactor;
@@ -613,5 +623,5 @@ function animate(){
  if(++frame%3===0)labelsUpdate();
 }
 // Safe startup: close loading after a real render, show a usable error if rendering throws.
-try{renderer.render(scene,camera);animate();setTimeout(()=>$('#loading').classList.add('done'),320)}
+try{renderer.render(scene,camera);document.body.dataset.sceneReady='true';animate();setTimeout(()=>$('#loading').classList.add('done'),320)}
 catch(error){console.error(error);$('#loading').classList.add('done');$('#error').hidden=false}
