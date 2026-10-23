@@ -47,7 +47,7 @@ composer.addPass(new RenderPass(scene,camera));
 const bloom=new UnrealBloomPass(new THREE.Vector2(1,1),.19,.37,.94);
 composer.addPass(bloom);
 composer.addPass(new OutputPass());
-let bloomEnabled=!lowPower;
+let bloomEnabled=false;
 const clock=new THREE.Clock();
 const tempObj=new THREE.Object3D();
 const animated=[];
@@ -131,7 +131,7 @@ void main(){
 }),[0,-5.5,0]);sea.rotation.x=-Math.PI/2;sea.castShadow=false;sea.receiveShadow=true;
 
 const hemi=new THREE.HemisphereLight('#d2e7ff','#946d4a',1.4);scene.add(hemi);
-const sun=new THREE.DirectionalLight('#ffdda5',2.7);sun.position.set(-55,83,39);sun.castShadow=true;sun.shadow.mapSize.set(lowPower?1024:2048,lowPower?1024:2048);sun.shadow.camera.left=-86;sun.shadow.camera.right=86;sun.shadow.camera.top=84;sun.shadow.camera.bottom=-84;sun.shadow.camera.near=1;sun.shadow.camera.far=200;sun.shadow.bias=-.00017;sun.shadow.normalBias=.025;scene.add(sun);
+const sun=new THREE.DirectionalLight('#ffdda5',2.7);sun.position.set(-55,83,39);sun.castShadow=true;sun.shadow.mapSize.set(lowPower?512:1024,lowPower?512:1024);sun.shadow.camera.left=-86;sun.shadow.camera.right=86;sun.shadow.camera.top=84;sun.shadow.camera.bottom=-84;sun.shadow.camera.near=1;sun.shadow.camera.far=200;sun.shadow.bias=-.00017;sun.shadow.normalBias=.025;scene.add(sun);
 const fill=new THREE.DirectionalLight('#74a5ce',.8);fill.position.set(50,34,-40);scene.add(fill);
 
 function island(coords,top,depth=8,material=M.cliff){const shape=new THREE.Shape();coords.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();const geo=new THREE.ExtrudeGeometry(shape,{depth,steps:1,bevelEnabled:true,bevelThickness:.65,bevelSize:.7,bevelSegments:2,curveSegments:3});geo.rotateX(-Math.PI/2);const mesh=add(geo,material,[0,top-depth,0]);mesh.receiveShadow=true;return mesh;}
@@ -149,7 +149,7 @@ island([[-43,20],[-24,17],[-17,29],[-26,38],[-42,33]],5.0,1.3,M.stone);
 island([[20,19],[38,20],[40,31],[27,39],[13,37]],5.2,1.2,M.stone);
 // Cliff mineral strata, outcrops, irregular shoreline boulders.
 const rockGeo=new THREE.DodecahedronGeometry(1,0);
-const rockMesh=new THREE.InstancedMesh(rockGeo,M.rock,900);rockMesh.castShadow=true;rockMesh.receiveShadow=true;scene.add(rockMesh);
+const rockMesh=new THREE.InstancedMesh(rockGeo,M.rock,900);rockMesh.castShadow=false;rockMesh.receiveShadow=true;scene.add(rockMesh);
 const rockColors=['#9a9388','#c8baaa','#b5a99b','#7b807a','#d7c6ab'];
 for(let i=0;i<900;i++){let a=i/900*Math.PI*2+randJitter(),r=rnd(40,54);let x=Math.cos(a)*r,z=Math.sin(a)*r*.78;tempObj.position.set(x,rnd(-10,1.5),z);tempObj.rotation.set(rnd(-1,1),rnd(0,Math.PI),rnd(-.4,.4));tempObj.scale.set(rnd(.7,2.9),rnd(.9,3.5),rnd(.7,3.1));tempObj.updateMatrix();rockMesh.setMatrixAt(i,tempObj.matrix);rockMesh.setColorAt(i,C(choice(rockColors)))}rockMesh.instanceMatrix.needsUpdate=true;function randJitter(){return rnd(-.018,.018)}
 // Riviera horizon: layered natural ridgelines instead of low-poly pyramid mountains.
@@ -613,7 +613,7 @@ function seasonPalette(season){
 $('#time').addEventListener('change',()=>lightMood(getMood()));
 $('#season').addEventListener('change',()=>seasonPalette($('#season').value));
 lightMood(getMood());seasonPalette('summer');
-if(lowPower){$('#quality').setAttribute('aria-pressed','false');$('#quality').textContent='✧ Léger'}
+$('#quality').setAttribute('aria-pressed','false');$('#quality').textContent='✧ Léger';
 function adapt(){const w=Math.max(1,viewport.clientWidth),h=Math.max(1,viewport.clientHeight);camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);composer.setSize(w,h);bloom.setSize(w,h);}
 addEventListener('resize',adapt);adapt();
 // Quality-minded interaction: raycast actual island surfaces, plus DOM district labels.

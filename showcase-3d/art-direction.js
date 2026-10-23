@@ -11,7 +11,7 @@ export function addArchitecturalFinishes({THREE,scene,M,box,cyl,sph,curveTube,ma
  const geoTile = new THREE.CylinderGeometry(.255,.255,.95,8,1,false,0,Math.PI);
  geoTile.rotateZ(Math.PI/2);
  const roofInstances = new THREE.InstancedMesh(geoTile, tileLight, 2100);
- roofInstances.castShadow=!lowPower;roofInstances.receiveShadow=true;scene.add(roofInstances);
+ roofInstances.castShadow=false;roofInstances.receiveShadow=true;scene.add(roofInstances);
  const scratch=new THREE.Object3D(),col=new THREE.Color();let roofCount=0;
  const roofColors=['#cc7354','#bc654e','#e49b72','#bc7055','#a84d3b','#e5a075','#b35b44'];
  function roofTiles({x,z,y,w,d,rise}) {
