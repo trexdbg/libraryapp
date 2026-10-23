@@ -1,0 +1,56 @@
+name: Visual QA — Riviera Edition
+on:
+  push:
+    paths:
+      - 'showcase-3d/**'
+      - '.github/workflows/render-preview.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  screenshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless browser
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Take and validate 3D screenshots
+        run: |
+          mkdir -p qa
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/riviera-http.log 2>&1 &
+          node <<'NODE'
+          const { chromium } = require('playwright');
+          (async()=>{
+            const browser=await chromium.launch({headless:true,args:['--enable-webgl','--enable-unsafe-swiftshader','--use-gl=angle','--use-angle=swiftshader','--disable-gpu-sandbox']});
+            const page=await browser.newPage({viewport:{width:1600,height:940},deviceScaleFactor:1});
+            const errors=[];
+            page.on('pageerror',e=>errors.push('PAGEERROR '+e.message));
+            page.on('console',m=>{if(m.type()==='error')errors.push('CONSOLE '+m.text())});
+            await page.goto('http://127.0.0.1:8765/showcase-3d/',{waitUntil:'domcontentloaded'});
+            await page.waitForTimeout(9000);
+            await page.screenshot({path:'qa/riviera-desktop.png',animations:'disabled'});
+            const ready=await page.evaluate(()=>document.body.dataset.sceneReady);
+            const labels=await page.locator('.label').count();
+            await page.locator('#photoMode').click();
+            await page.waitForTimeout(1000);
+            await page.screenshot({path:'qa/riviera-immersion.png',animations:'disabled'});
+            const summary={ready,labels,errors};
+            require('fs').writeFileSync('qa/summary.json',JSON.stringify(summary,null,2));
+            console.log(JSON.stringify(summary));
+            await browser.close();
+            if(ready!=='true'||labels!==12||errors.length)process.exitCode=1;
+          })().catch(e=>{console.error(e);process.exitCode=1});
+          NODE
+      - name: Upload visual QA artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: riviera-visual-qa
+          path: qa/
+          if-no-files-found: warn
