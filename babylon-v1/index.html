@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#102a32">
+  <meta name="description" content="Library Max, une librairie à explorer en 3D. Découvrez nos univers Fantasy, Manga et Jeunesse dans un prototype interactif Babylon.js.">
+  <title>Library Max — Le monde des histoires · Expérience 3D</title>
+  <link rel="preconnect" href="https://cdn.babylonjs.com">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="https://cdn.babylonjs.com/babylon.js"></script>
+  <script type="module" src="./src/main.mjs"></script>
+</head>
+<body>
+  <div id="app">
+    <canvas id="renderCanvas" tabindex="0" aria-label="Librairie 3D interactive. Cliquez sur le sol pour marcher, sur un livre pour le découvrir, ou utilisez les flèches et ZQSD."></canvas>
+    <div class="vignette" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="../" title="Retour au site principal">
+        <span class="brand-seal">✦</span><span><small>UNE LIBRAIRIE À EXPLORER</small><strong>Library <em>Max</em></strong></span>
+      </a>
+      <span class="edition"><i></i> ÉDITION EXPLORATEUR <span>· BABYLON.JS</span></span>
+      <a class="back" href="../">Retour au site ↗</a>
+    </header>
+    <aside class="intro" id="intro">
+      <div class="eyebrow">✧ &nbsp; LE LIVRE DEVIENT UN MONDE</div>
+      <h1>Entrez dans<br><em>l'histoire.</em></h1>
+      <p>Une librairie qui se découvre comme un jeu. Promenez-vous, explorez les rayons et choisissez votre prochaine lecture.</p>
+      <button id="exploreBtn" class="cta">Commencer l'exploration <span>↗</span></button>
+      <div class="microcopy">UNE PREMIÈRE PIÈCE EN 3D • PROTOTYPE INTERACTIF</div>
+    </aside>
+    <nav class="zones" aria-label="Explorer les rayons">
+      <p>LES UNIVERS <span>03</span></p>
+      <button class="zone active" data-zone="fantasy"><span class="zone-icon">✧</span><span><strong>Fantasy & SF</strong><small>Mondes imaginaires</small></span><b>↗</b></button>
+      <button class="zone" data-zone="manga"><span class="zone-icon">桜</span><span><strong>Mangas</strong><small>Histoires sans limites</small></span><b>↗</b></button>
+      <button class="zone" data-zone="jeunesse"><span class="zone-icon">☼</span><span><strong>Jeunesse</strong><small>La magie des premières pages</small></span><b>↗</b></button>
+      <div class="nav-note">Cliquez sur un rayon pour y conduire le personnage.</div>
+    </nav>
+    <div class="mode-switch" aria-label="Mode de caméra">
+      <button id="isoBtn" class="active" aria-pressed="true">◈ &nbsp; Isométrique</button>
+      <button id="insideBtn" aria-pressed="false">◎ &nbsp; Dans le rayon</button>
+    </div>
+    <div id="marker" class="marker" hidden><span>✦</span><b id="markerText">À découvrir</b></div>
+    <div class="lower-hud">
+      <div class="location"><span class="location-mark">✥</span><span><small>VOUS VOUS TROUVEZ</small><strong id="locationText">Dans la grande librairie</strong></span></div>
+      <div class="hint"><span class="desktop-hint">CLIC : MARCHER &nbsp; • &nbsp; ZQSD / FLÈCHES : BOUGER &nbsp; • &nbsp; E : INTERAGIR &nbsp; • &nbsp; ÉCHAP : RETOUR</span><span class="mobile-hint">TOUCHEZ LE SOL POUR VOUS DÉPLACER</span></div>
+      <button id="resetBtn" class="reset" title="Retour à la vue d'ensemble">↺ &nbsp; Vue générale</button>
+    </div>
+    <div class="dpad" aria-label="Commandes de déplacement">
+      <button data-dir="up" aria-label="Avancer">▲</button>
+      <button data-dir="left" aria-label="Aller à gauche">◀</button>
+      <button data-dir="down" aria-label="Reculer">▼</button>
+      <button data-dir="right" aria-label="Aller à droite">▶</button>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="bookScrim" class="scrim" hidden></div>
+    <section id="bookPanel" class="book-panel" role="dialog" aria-modal="true" aria-labelledby="bookTitle" hidden>
+      <button id="closeBook" class="close" aria-label="Fermer la fiche">×</button>
+      <div class="book-heading">✦ &nbsp; SÉLECTION À DÉCOUVRIR</div>
+      <div class="book-layout"><div id="bookArtwork" class="cover-art"></div><div class="book-copy"><p id="bookGenre" class="genre">FANTASY & SF</p><h2 id="bookTitle"></h2><p id="bookAuthor" class="author"></p><p id="bookNote" class="book-note"></p><a id="bookLink" target="_blank" rel="noopener noreferrer" class="book-link">Rechercher ce livre ↗</a></div></div>
+      <div class="disclaimer">Sélection éditoriale de démonstration. Visuels illustratifs, aucun prix ni stock garanti.</div>
+    </section>
+    <div id="loading" class="loading" role="status" aria-live="polite"><div class="loading-symbol">✦</div><strong>La librairie prend vie…</strong><span>Préparation des étagères et des histoires</span></div>
+    <div id="error" class="error" hidden><strong>La scène 3D n'a pas pu être démarrée.</strong><p>Vérifiez que WebGL et le chargement de Babylon.js sont autorisés par votre navigateur.</p><a href="../">Accéder au site classique ↗</a></div>
+  </div>
+</body>
+</html>
