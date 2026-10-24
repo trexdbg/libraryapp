@@ -31,9 +31,10 @@ function boot(){
   let highlighted=null,toastTimer=null,lastKey=null,clock=0,motion=0;
   const keys=new Set();
   const hero=world.hero;
+  let orthoScale=1;
   function updateOrtho(){
     const aspect=engine.getRenderWidth()/Math.max(1,engine.getRenderHeight());
-    const half=aspect<.83?17.6:aspect<1.3?19:20.8;
+    const half=(aspect<.83?17.6:aspect<1.3?19:20.8)*orthoScale;
     cam.orthoTop=half;cam.orthoBottom=-half;cam.orthoLeft=-half*aspect;cam.orthoRight=half*aspect;
   }
   updateOrtho();
@@ -184,8 +185,8 @@ function boot(){
   }
   canvas.addEventListener('wheel',e=>{
     if(mode!=='iso')return;e.preventDefault();
-    const half=cam.orthoTop+Math.sign(e.deltaY)*1.1;
-    cam.orthoTop=Math.max(13,Math.min(28,half));cam.orthoBottom=-cam.orthoTop;const a=engine.getRenderWidth()/engine.getRenderHeight();cam.orthoLeft=-cam.orthoTop*a;cam.orthoRight=cam.orthoTop*a;
+    orthoScale=Math.max(.68,Math.min(1.4,orthoScale+Math.sign(e.deltaY)*.055));
+    updateOrtho();
   },{passive:false});
   window.addEventListener('resize',()=>{engine.resize();updateOrtho();});
   engine.runRenderLoop(()=>{tick();scene.render();});
