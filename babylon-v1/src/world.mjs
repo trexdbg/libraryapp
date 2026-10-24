@@ -128,9 +128,15 @@ export function createWorld(B, scene, quality='high') {
   return {hero,legs,arms,footGlow,animated,blocks,pickables,zones,renderMark:null};
 
   function buildShelf(x,z,w,d,zone,slot){
-    const h=4.35,back=box('shelf back',w,h,d,x,h/2,z,woodDark);
+    const h=4.35;
+    // A bookshelf is HOLLOW. Solid wood blocks would completely hide the volumes.
+    // Back panel follows the orientation of the rack, while its front stays open.
+    const back=slot===0
+      ?box('shelf back panel',w,h,.12,x,h/2,z+d/2-.07,woodDark)
+      :box('shelf side back panel',.12,h,d,x+(slot===1?-1:1)*(w/2-.06),h/2,z,woodDark);
     back.isPickable=true;back.metadata={type:'zone',zoneId:zone.id};pickables.push(back);
-    box('shelf inner',w-.14,h-.22,d+.055,x,h/2,z,wood);
+    if(slot===0)box('shelf inner backing',w-.14,h-.22,.035,x,h/2,z+d/2-.145,wood);
+    else box('shelf inner side backing',.04,h-.22,d-.15,x+(slot===1?-1:1)*(w/2-.145),h/2,z,wood);
     for(let level=0;level<5;level++){
       const y=.46+level*.84;
       box('hardwood shelf',w+.16,.12,d+.18,x,y,z,woodLight);
